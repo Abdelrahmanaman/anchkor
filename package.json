@@ -1,29 +1,45 @@
 {
-  "name": "tanstack-solid-start-example-basic",
-  "private": true,
-  "sideEffects": false,
-  "type": "module",
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "start": "vite start"
-  },
-  "dependencies": {
-    "@tanstack/solid-router": "^1.121.0-alpha.22",
-    "@tanstack/solid-router-devtools": "^1.121.0-alpha.22",
-    "@tanstack/solid-start": "^1.121.0-alpha.24",
-    "solid-js": "^1.9.5",
-    "redaxios": "^0.5.1",
-    "tailwind-merge": "^2.6.0",
-    "vite": "^6.3.5"
-  },
-  "devDependencies": {
-    "@types/node": "^22.5.4",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
-    "unocss": "^66.1.3",
-    "vite-tsconfig-paths": "^5.1.4"
-  }
+	"name": "tanstack-solid-start-example-basic",
+	"private": true,
+	"sideEffects": false,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"start": "bun run .output/server/index.mjs"
+	},
+	"dependencies": {
+		"@kobalte/core": "^0.13.10",
+		"@tanstack/solid-router": "^1.121.0-alpha.22",
+		"@tanstack/solid-router-devtools": "^1.121.0-alpha.22",
+		"@tanstack/solid-start": "^1.121.0-alpha.24",
+		"arktype": "^2.1.20",
+		"better-auth": "^1.2.8",
+		"cva": "^1.0.0-beta.4",
+		"dotenv": "^16.5.0",
+		"drizzle-orm": "^0.44.2",
+		"lucide-solid": "^0.513.0",
+		"pg": "^8.16.0",
+		"postgres": "^3.4.7",
+		"redaxios": "^0.5.1",
+		"solid-js": "^1.9.5",
+		"tailwind-merge": "^2.6.0",
+		"vite": "^6.3.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@iconify-json/solar": "^1.2.2",
+		"@types/node": "^22.5.4",
+		"@types/pg": "^8.15.4",
+		"@unocss/extractor-arbitrary-variants": "^66.1.3",
+		"@unocss/preset-icons": "^66.1.3",
+		"autoprefixer": "^10.4.20",
+		"drizzle-kit": "^0.31.1",
+		"postcss": "^8.5.1",
+		"tailwindcss": "^3.4.17",
+		"tsx": "^4.19.4",
+		"typescript": "^5.7.2",
+		"unocss": "^66.1.3",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
 }
