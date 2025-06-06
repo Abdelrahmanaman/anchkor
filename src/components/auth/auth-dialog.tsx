@@ -13,7 +13,7 @@ import { Separator } from "../ui/separator";
 
 export default function AuthDialog() {
 	return (
-		<Dialog open>
+		<Dialog>
 			<DialogTrigger class="btn-secondary">
 				<div class="i-solar:dialog-2-bold-duotone" />
 				Sign In

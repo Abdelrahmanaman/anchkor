@@ -1,5 +1,5 @@
-import AuthDialog from "~/components/auth/auth-dialog";
-import {} from "~/components/ui/dialog";
+import { FeatureSection, HeroSection } from "~/components/hero-section";
+import { PricingSection } from "~/components/pricing-section";
 
 export const Route = createFileRoute({
 	component: Home,
@@ -7,13 +7,10 @@ export const Route = createFileRoute({
 
 function Home() {
 	return (
-		<div class=" min-h-dvh p-2">
-			<h3 class="pos-relative text-8xl ">Welcome Home!!!</h3>
-			<button type="button" class=" btn-outline ">
-				<div class="i-solar:dialog-2-bold-duotone " />
-				click me
-			</button>
-			<AuthDialog />
-		</div>
+		<section class=" min-h-dvh space-x-2 p-2">
+			<HeroSection />
+			<FeatureSection />
+			<PricingSection />
+		</section>
 	);
 }
