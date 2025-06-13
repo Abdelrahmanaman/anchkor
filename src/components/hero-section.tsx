@@ -1,7 +1,7 @@
 export function HeroSection() {
 	return (
 		<div class="relative isolate overflow-hidden bg-background">
-			<div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-40">
+			<div class="mx-auto max-w-7xl lg:flex lg:items-center lg:gap-x-10 lg:py-40">
 				<div class="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
 					<div class="mb-8 flex items-center gap-2">
 						<div class="i-solar:box-bold size-14" />
@@ -24,12 +24,12 @@ export function HeroSection() {
 					</div>
 				</div>
 				<div class="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
-					<div class="relative mx-auto w-full max-w-lg lg:max-w-md">
-						<div class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
+					<div class="relative mx-auto w-full max-w-3xs lg:max-w-sm">
+						<div class="relative overflow-hidden ">
 							<img
-								src="/google.svg"
+								src="/hero-section.webp"
 								alt="OrderFlow dashboard preview"
-								class="w-full"
+								class="w-full bg-transparent"
 							/>
 						</div>
 					</div>
@@ -82,16 +82,16 @@ const features = [
 
 export function FeatureSection() {
 	return (
-		<div class="bg-background py-24 sm:py-32">
-			<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="bg-background ">
+			<div class="mx-auto max-w-7xl ">
 				<div class="mx-auto max-w-2xl lg:text-center">
 					<h2 class="font-semibold text-base leading-7">Everything you need</h2>
 					<p class="mt-2 font-bold text-3xl tracking-tight sm:text-4xl">
 						Powerful features for modern businesses
 					</p>
 					<p class="mt-6 text-lg text-muted-foreground leading-8">
-						Anchkor combines powerful functionality with an intuitive
-						interface, making order management simpler than ever before.
+						Anchkor combines powerful functionality with an intuitive interface,
+						making order management simpler than ever before.
 					</p>
 				</div>
 				<div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">

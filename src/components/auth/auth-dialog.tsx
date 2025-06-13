@@ -11,13 +11,14 @@ import {
 import { TextField, TextFieldInput, TextFieldLabel } from "../ui/input";
 import { Separator } from "../ui/separator";
 
-export default function AuthDialog() {
+type AuthDialogProps = {
+	label: string;
+	class?: string;
+};
+export default function AuthDialog(props: AuthDialogProps) {
 	return (
 		<Dialog>
-			<DialogTrigger class="btn-secondary">
-				<div class="i-solar:dialog-2-bold-duotone" />
-				Sign In
-			</DialogTrigger>
+			<DialogTrigger class={props.class}>{props.label}</DialogTrigger>
 
 			<DialogContent
 				onOpenAutoFocus={(e) => e.preventDefault()}

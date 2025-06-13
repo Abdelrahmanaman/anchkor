@@ -69,7 +69,6 @@ const TextFieldInput = <T extends ValidComponent = "input">(
 				"flex h-9 w-full min-w-0 appearance-none rounded-md border-0 border-input bg-secondary/70 px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[1px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ",
 				local.class,
 			)}
-			invalid-style="aria-invalid:ring-destructive/20 aria-invalid:border-destructive;"
 			{...others}
 		/>
 	);
@@ -132,6 +131,7 @@ const TextFieldDescription = <T extends ValidComponent = "div">(
 type TextFieldErrorMessageProps<T extends ValidComponent = "div"> =
 	TextFieldPrimitive.TextFieldErrorMessageProps<T> & {
 		class?: string | undefined;
+		error?: string | undefined;
 	};
 
 const TextFieldErrorMessage = <T extends ValidComponent = "div">(
@@ -139,6 +139,7 @@ const TextFieldErrorMessage = <T extends ValidComponent = "div">(
 ) => {
 	const [local, others] = splitProps(props as TextFieldErrorMessageProps, [
 		"class",
+		"error",
 	]);
 	return (
 		<TextFieldPrimitive.ErrorMessage
@@ -147,9 +148,32 @@ const TextFieldErrorMessage = <T extends ValidComponent = "div">(
 				local.class,
 			)}
 			{...others}
-		/>
+		>
+			{local.error}
+		</TextFieldPrimitive.ErrorMessage>
 	);
 };
+
+// type TextFieldProps<T extends ValidComponent = "div"> =
+// 	TextFieldPrimitive.TextFieldRootProps<T> & {
+// 		class?: string | undefined;
+// 		label?: string | undefined;
+// 	};
+
+// const TextField = <T extends ValidComponent = "div">(
+// 	props: PolymorphicProps<T, TextFieldProps<T>>,
+// ) => {
+// 	const [local, others] = splitProps(props as TextFieldProps, [
+// 		"class",
+// 		"label",
+// 	]);
+// 	return (
+// 		<TextFieldRoot class={cn("flex flex-col gap-1", local.class)} {...others}>
+// 			<TextFieldLabel>{local.label}</TextFieldLabel>
+
+// 		</TextFieldRoot>
+// 	);
+// };
 
 export {
 	TextField,

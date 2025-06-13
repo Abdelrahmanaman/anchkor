@@ -24,13 +24,13 @@ const Checkbox = <T extends ValidComponent = "div">(
 	return (
 		<CheckboxPrimitive.Checkbox
 			class={cn(
-				"items-top group relative flex items-center gap-2",
+				"items-top group relative flex items-center gap-1",
 				local.class,
 			)}
 			{...others}
 		>
 			<CheckboxPrimitive.Input />
-			<CheckboxPrimitive.Control class="flex size-4 items-center justify-center rounded-sm border border-input p-2 data-[checked]:bg-secondary">
+			<CheckboxPrimitive.Control class="flex size-4 items-center justify-center rounded-sm border border-input p-px data-[checked]:bg-secondary">
 				<CheckboxPrimitive.Indicator>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

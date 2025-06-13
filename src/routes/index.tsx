@@ -1,16 +1,21 @@
+import { createFileRoute } from "@tanstack/solid-router";
 import { FeatureSection, HeroSection } from "~/components/hero-section";
+import Header from "~/components/navbar/header";
 import { PricingSection } from "~/components/pricing-section";
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/")({
 	component: Home,
 });
 
 function Home() {
 	return (
-		<section class=" min-h-dvh space-x-2 p-2">
-			<HeroSection />
-			<FeatureSection />
-			<PricingSection />
-		</section>
+		<div>
+			<Header />
+			<section class=" min-h-dvh space-y-20 p-4">
+				<HeroSection />
+				<FeatureSection />
+				<PricingSection />
+			</section>
+		</div>
 	);
 }

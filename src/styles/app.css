@@ -1,3 +1,10 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@iconify/tailwind4" {
+  /* biome-ignore lint/correctness/noUnknownProperty: <explanation> */
+  prefixes: solar, tabler;
+  scale: 1.25;
+}
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -44,7 +51,8 @@
   --check-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(0.556 0 0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>'); /* --muted-foreground */
 }
 
-.dark {
+.dark,
+[data-kb-theme="dark"] {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

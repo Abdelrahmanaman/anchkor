@@ -19,40 +19,75 @@ import {
   createServerFileRoute,
 } from '@tanstack/solid-start/server'
 
+import { ServerRoute as authAuthSplatRouteImport } fr../../src/routes/(auth)/auth/$h)/auth/$'
+
 // Create/Update Routes
 
 const rootRoute = createServerRoute()
 
+const authAuthSplatRoute = authAuthSplatRouteImport.update({
+  id: '/(auth)/auth/$',
+  path: '/auth/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/solid-start/server' {
-  interface FileRoutesByPath {}
+  interface FileRoutesByPath {
+    '/(auth)/auth/$': {
+      id: '/(auth)/auth/$'
+      path: '/auth/$'
+      fullPath: '/auth/$'
+      preLoaderRoute: typeof authAuthSplatRouteImport
+      parentRoute: typeof rootRoute
+    }
+  }
 }
 
 // Add type-safety to the createFileRoute function across the route tree
 
+declare module './../../src/routes/(auth)/auth/$' {
+  const createServerFileRoute: CreateServerFileRoute<
+    FileRoutesByPath['/(auth)/auth/$']['parentRoute'],
+    FileRoutesByPath['/(auth)/auth/$']['id'],
+    FileRoutesByPath['/(auth)/auth/$']['path'],
+    FileRoutesByPath['/(auth)/auth/$']['fullPath'],
+    unknown
+  >
+}
+
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {}
+export interface FileRoutesByFullPath {
+  '/auth/$': typeof authAuthSplatRoute
+}
 
-export interface FileRoutesByTo {}
+export interface FileRoutesByTo {
+  '/auth/$': typeof authAuthSplatRoute
+}
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/(auth)/auth/$': typeof authAuthSplatRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/auth/$'
+  id: '__root__' | '/(auth)/auth/$'
   fileRoutesById: FileRoutesById
 }
 
-export interface RootRouteChildren {}
+export interface RootRouteChildren {
+  authAuthSplatRoute: typeof authAuthSplatRoute
+}
 
-const rootRouteChildren: RootRouteChildren = {}
+const rootRouteChildren: RootRouteChildren = {
+  authAuthSplatRoute: authAuthSplatRoute,
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
@@ -63,7 +98,12 @@ export const routeTree = rootRoute
   "routes": {
     "__root__": {
       "filePath": "__root.tsx",
-      "children": []
+      "children": [
+        "/(auth)/auth/$"
+      ]
+    },
+    "/(auth)/auth/$": {
+      "filePath": "(auth)/auth/$.ts"
     }
   }
 }

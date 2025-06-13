@@ -1,20 +1,18 @@
+import { ColorModeProvider, cookieStorageManagerSSR } from "@kobalte/core";
 import {
 	HeadContent,
 	Outlet,
 	Scripts,
 	createRootRoute,
 } from "@tanstack/solid-router";
+import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
+import { getCookie } from "@tanstack/solid-start/server";
 import type * as Solid from "solid-js";
+import { isServer } from "solid-js/web";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary";
 import { NotFound } from "~/components/not-found";
 import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo";
-import "virtual:uno.css";
-import { ColorModeProvider, cookieStorageManagerSSR } from "@kobalte/core";
-import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
-import { getCookie } from "@tanstack/solid-start/server";
-import { isServer } from "solid-js/web";
-import Header from "~/components/header";
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -89,11 +87,7 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
 		<>
 			<HeadContent />
 			<ColorModeProvider storageManager={storageManager}>
-				{/* <ThemeToggle /> */}
-				<main class="min-h-dvh bg-background text-foreground">
-					<Header />
-					{children}
-				</main>
+				<main class="h-dvh bg-background p-4 text-foreground">{children}</main>
 			</ColorModeProvider>
 			<TanStackRouterDevtools position="bottom-right" />
 			<Scripts />
