@@ -1,4 +1,4 @@
-import { For, Show, createSignal } from "solid-js";
+import { For, Show, createSignal, onMount } from "solid-js";
 
 import type {
 	ColumnFiltersState,
@@ -34,47 +34,158 @@ import {
 	TableRow,
 } from "~/components/ui/table";
 
-const data: Payment[] = [
+// --- Order Type Definition based on your Drizzle Schema ---
+export type Order = {
+	id: string;
+	storeId: string;
+	customerId?: string;
+	orderNumber: string;
+	status:
+		| "pending"
+		| "unfulfilled"
+		| "fulfilled"
+		| "shipped"
+		| "delivered"
+		| "cancelled";
+	totalAmount: number;
+	shippingAddress: {
+		name: string;
+		street: string;
+		city: string;
+		state: string;
+		zip: string;
+		country: string;
+	};
+	billingAddress?: {
+		name?: string;
+		street?: string;
+		city?: string;
+		state?: string;
+		zip?: string;
+		country?: string;
+	};
+	createdAt: Date;
+	updatedAt: Date;
+};
+
+// --- Mock Data (replace with your actual data fetching logic) ---
+const mockOrders: Order[] = [
 	{
-		id: "m5gr84i9",
-		amount: 316,
-		status: "success",
-		email: "ken99@yahoo.com",
+		id: "ord_1",
+		storeId: "store_abc",
+		orderNumber: "20240001",
+		status: "pending",
+		totalAmount: 123.45,
+		shippingAddress: {
+			name: "Alice Wonderland",
+			street: "123 Rabbit Hole",
+			city: "Wonderland",
+			state: "CA",
+			zip: "90210",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-01T10:00:00Z"),
+		updatedAt: new Date("2024-06-01T10:00:00Z"),
 	},
 	{
-		id: "3u1reuv4",
-		amount: 242,
-		status: "success",
-		email: "Abe45@gmail.com",
+		id: "ord_2",
+		storeId: "store_abc",
+		customerId: "user_123",
+		orderNumber: "20240002",
+		status: "unfulfilled",
+		totalAmount: 50.0,
+		shippingAddress: {
+			name: "Bob Builder",
+			street: "456 Construction Site",
+			city: "Builderville",
+			state: "NY",
+			zip: "10001",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-02T11:30:00Z"),
+		updatedAt: new Date("2024-06-02T11:30:00Z"),
 	},
 	{
-		id: "derv1ws0",
-		amount: 837,
-		status: "processing",
-		email: "Monserrat44@gmail.com",
+		id: "ord_3",
+		storeId: "store_xyz",
+		orderNumber: "20240003",
+		status: "fulfilled",
+		totalAmount: 789.99,
+		shippingAddress: {
+			name: "Charlie Chaplin",
+			street: "789 Silent St",
+			city: "Hollywood",
+			state: "CA",
+			zip: "90028",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-03T14:45:00Z"),
+		updatedAt: new Date("2024-06-03T14:45:00Z"),
 	},
 	{
-		id: "5kma53ae",
-		amount: 874,
-		status: "success",
-		email: "Silas22@gmail.com",
+		id: "ord_4",
+		storeId: "store_abc",
+		customerId: "user_456",
+		orderNumber: "20240004",
+		status: "shipped",
+		totalAmount: 200.5,
+		shippingAddress: {
+			name: "Diana Prince",
+			street: "1 Amazon Way",
+			city: "Themyscira",
+			state: "FL",
+			zip: "33101",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-04T09:15:00Z"),
+		updatedAt: new Date("2024-06-04T09:15:00Z"),
 	},
 	{
-		id: "bhqecj4p",
-		amount: 721,
-		status: "failed",
-		email: "carmella@hotmail.com",
+		id: "ord_5",
+		storeId: "store_xyz",
+		orderNumber: "20240005",
+		status: "delivered",
+		totalAmount: 99.99,
+		shippingAddress: {
+			name: "Eve Harrington",
+			street: "10 Broadway",
+			city: "New York",
+			state: "NY",
+			zip: "10036",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-05T16:00:00Z"),
+		updatedAt: new Date("2024-06-05T16:00:00Z"),
+	},
+	{
+		id: "ord_6",
+		storeId: "store_abc",
+		orderNumber: "20240006",
+		status: "cancelled",
+		totalAmount: 10.0,
+		shippingAddress: {
+			name: "Frankenstein Monster",
+			street: "666 Laboratory Ln",
+			city: "Transylvania",
+			state: "GA",
+			zip: "30303",
+			country: "USA",
+		},
+		createdAt: new Date("2024-06-06T08:00:00Z"),
+		updatedAt: new Date("2024-06-06T08:00:00Z"),
 	},
 ];
 
-export type Payment = {
-	id: string;
-	amount: number;
-	status: "pending" | "processing" | "success" | "failed";
-	email: string;
-};
+// Define a type for the table's meta property
+// Keeping this type, even if updateOrderStatus is not called directly in the dropdown,
+// as it defines the structure expected by the ColumnDef type below.
+interface TableMeta {
+	updateOrderStatus: (orderId: string, newStatus: Order["status"]) => void;
+}
 
-export const columns: ColumnDef<Payment>[] = [
+// --- Column Definitions for the Orders Table ---
+export const columns: ColumnDef<Order, TableMeta>[] = [
+	// Type the ColumnDef with TableMeta
 	{
 		id: "select",
 		header: (props) => (
@@ -98,14 +209,14 @@ export const columns: ColumnDef<Payment>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: "status",
-		header: "Status",
+		accessorKey: "orderNumber",
+		header: "Order #",
 		cell: (props) => (
-			<div class="capitalize">{props.row.getValue("status")}</div>
+			<div class="font-medium">{props.row.getValue("orderNumber")}</div>
 		),
 	},
 	{
-		accessorKey: "email",
+		accessorKey: "status",
 		header: (props) => {
 			return (
 				<button
@@ -115,35 +226,102 @@ export const columns: ColumnDef<Payment>[] = [
 					}
 					class="flex items-center"
 				>
-					Email
+					Status
+					{/* These iconify classes assume global availability or a specific setup */}
 					<div
 						class={`iconify solar--double-alt-arrow-down-linear transition-transform duration-200 ${props.column.getIsSorted() === "asc" ? "rotate-180" : ""}`}
 					/>
 				</button>
 			);
 		},
-		cell: (props) => (
-			<div class="lowercase ">{props.row.getValue("email")}</div>
-		),
+		cell: (props) => {
+			const currentStatus = props.row.getValue("status") as Order["status"];
+			const orderId = props.row.original.id; // Get the order ID for state updates
+
+			const statuses: Order["status"][] = [
+				"pending",
+				"unfulfilled",
+				"fulfilled",
+				"shipped",
+				"delivered",
+				"cancelled",
+			];
+
+			return (
+				<DropdownMenu placement="bottom-start">
+					<DropdownMenuTrigger as="button" class="flex items-center gap-1">
+						{currentStatus}{" "}
+						<div class="iconify solar--alt-arrow-down-linear text-sm" />
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuLabel>Change Status</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<For each={statuses}>
+							{(statusOption) => (
+								<DropdownMenuItem
+									// onClick function removed as requested.
+									// You will handle status changes externally based on this dropdown.
+									class="capitalize data-[current=true]:bg-blue-50 data-[current=true]:text-blue-700"
+									// Add a visual indicator for the current status
+									data-current={
+										currentStatus === statusOption ? "true" : "false"
+									}
+								>
+									{statusOption}
+								</DropdownMenuItem>
+							)}
+						</For>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			);
+		},
 	},
 	{
-		accessorKey: "amount",
-		header: () => <div class="text-right">Amount</div>,
+		accessorKey: "totalAmount",
+		header: () => <div>Amount</div>, // Changed to "Amount" to match payment example
 		cell: (props) => {
 			const formatted = () => {
-				const amount = Number.parseFloat(props.row.getValue("amount"));
+				const amount = Number.parseFloat(props.row.getValue("totalAmount"));
 				return new Intl.NumberFormat("en-US", {
 					style: "currency",
 					currency: "USD",
 				}).format(amount);
 			};
-			return <div class="text-right font-medium">{formatted()}</div>;
+			return <div class=" font-medium">{formatted()}</div>;
+		},
+	},
+	{
+		// Changed to shippingAddress for OMS relevance, similar to Payment's email column
+		accessorKey: "shippingAddress",
+		header: (props) => {
+			return (
+				<button
+					type="button"
+					onClick={() =>
+						props.column.toggleSorting(props.column.getIsSorted() === "asc")
+					}
+					class="flex items-center"
+				>
+					Shipping Recipient
+					<div
+						class={`iconify solar--double-alt-arrow-down-linear transition-transform duration-200 ${props.column.getIsSorted() === "asc" ? "rotate-180" : ""}`}
+					/>
+				</button>
+			);
+		},
+		cell: (props) => {
+			const address = props.row.getValue(
+				"shippingAddress",
+			) as Order["shippingAddress"];
+			// Displaying recipient name similar to how email was displayed
+			return <div class="lowercase ">{address.name}</div>;
 		},
 	},
 	{
 		id: "actions",
 		header: () => <div class="text-right">Actions</div>,
 		cell: (props) => {
+			const order = props.row.original;
 			return (
 				<div class="text-right">
 					<DropdownMenu placement="bottom-end">
@@ -152,17 +330,27 @@ export const columns: ColumnDef<Payment>[] = [
 							<div class="iconify tabler--dots-vertical" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuLabel>Actions</DropdownMenuLabel>
+							<DropdownMenuLabel>Actions</DropdownMenuLabel>{" "}
+							{/* Changed to "Actions" */}
 							<DropdownMenuItem
-								onClick={() =>
-									navigator.clipboard.writeText(props.row.original.id)
-								}
+								onClick={() => {
+									// Using document.execCommand('copy') for better compatibility in iframes
+									const el = document.createElement("textarea");
+									el.value = order.id;
+									document.body.appendChild(el);
+									el.select();
+									document.execCommand("copy");
+									document.body.removeChild(el);
+									console.log("Copied Order ID:", order.id);
+								}}
 							>
-								Copy payment ID
+								Copy Order ID
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>View customer</DropdownMenuItem>
-							<DropdownMenuItem>View payment details</DropdownMenuItem>
+							<DropdownMenuItem>View customer</DropdownMenuItem>{" "}
+							{/* Reverted to "View customer" */}
+							<DropdownMenuItem>View order details</DropdownMenuItem>{" "}
+							{/* Reverted to "View payment details" -> "View order details" */}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -172,6 +360,8 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export function DataTableDemo() {
+	// Use a signal for the data to allow updates (e.g., status changes)
+	const [orders, setOrders] = createSignal<Order[]>([]);
 	const [sorting, setSorting] = createSignal<SortingState>([]);
 	const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
 		[],
@@ -181,17 +371,27 @@ export function DataTableDemo() {
 	);
 	const [rowSelection, setRowSelection] = createSignal({});
 
-	/*
-get data() {
-      return props.data
-    },
-    get columns() {
-      return props.columns
-    },
-*/
+	// Simulate fetching data on component mount
+	onMount(() => {
+		setOrders(mockOrders);
+	});
 
-	const table = createSolidTable({
-		data,
+	// This function is for mock data updates only and does not perform backend calls.
+	const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
+		setOrders((prevOrders) =>
+			prevOrders.map((order) =>
+				order.id === orderId ? { ...order, status: newStatus } : order,
+			),
+		);
+		console.log(`Mock: Order ${orderId} status updated to: ${newStatus}`);
+	};
+
+	// Initialize the Solid Table instance
+	const table = createSolidTable<Order>({
+		// Type the table with Order data and TableMeta
+		get data() {
+			return orders();
+		}, // Use signal getter for reactivity
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -215,16 +415,27 @@ get data() {
 				return rowSelection();
 			},
 		},
+		// Pass the update function via 'meta' so it can be accessed in cell renderers
+		meta: {
+			updateOrderStatus: updateOrderStatus,
+		},
 	});
 
 	return (
 		<div class="w-full">
 			<div class="flex items-center py-4">
 				<TextField
-					value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-					onChange={(value) => table.getColumn("email")?.setFilterValue(value)}
+					value={
+						(table.getColumn("orderNumber")?.getFilterValue() as string) ?? ""
+					}
+					onChange={(value) =>
+						table.getColumn("orderNumber")?.setFilterValue(value)
+					}
 				>
-					<TextFieldInput placeholder="Filter emails..." class="max-w-sm" />
+					<TextFieldInput
+						placeholder="Filter order numbers..."
+						class="max-w-sm"
+					/>
 				</TextField>
 				<DropdownMenu placement="bottom-end">
 					<DropdownMenuTrigger as="button" class="ml-auto">

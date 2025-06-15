@@ -8,6 +8,20 @@
       "when": 1749649828597,
       "tag": "0000_nifty_thunderbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749843829512,
+      "tag": "0001_goofy_crusher_hogan",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749846277505,
+      "tag": "0002_acoustic_sleeper",
+      "breakpoints": true
     }
   ]
 }

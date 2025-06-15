@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { jwt, organization } from "better-auth/plugins";
 import { db } from "~/db/db";
 import * as schema from "~/db/schema";
-import { organization, jwt } from "better-auth/plugins";
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
@@ -22,5 +22,12 @@ export const auth = betterAuth({
 			enabled: true,
 		},
 	},
-	plugins: [organization(), jwt()],
+	plugins: [
+		organization(),
+		jwt({
+			jwt: {
+				expirationTime: "1d",
+			},
+		}),
+	],
 });

@@ -22,10 +22,11 @@ function RouteComponent() {
 			password: "",
 		} as LoginType,
 		onSubmit: async ({ value }) => {
-			await signIn.email({
+			const d = await signIn.email({
 				email: value.email,
 				password: value.password,
 			});
+			console.log(d.data?.user.id);
 		},
 	}));
 	return (

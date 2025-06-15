@@ -1,72 +1,56 @@
-# Welcome to TanStack.com!
+# Anchkor - Real-time Order Management System
 
-This site is built with TanStack Router!
+Anchkor is a modern, real-time Order Management System (OMS) designed to streamline your e-commerce operations. Built with a powerful tech stack, it provides seamless data synchronization and integration with popular platforms like Shopify and WooCommerce.
 
-- [TanStack Router Docs](https://tanstack.com/router)
+## ✨ Key Features
 
-It's deployed automagically with Netlify!
+-   **Real-time Data Sync:** Powered by **Roci Corp's `zero` sync engine**, ensuring your data is always up-to-date across all connected clients without manual refreshes.
+-   **E-commerce Integration:** Easily connect your Shopify and WooCommerce stores to manage orders from a single, unified dashboard.
+-   **Modern Frontend:** A beautiful and responsive UI built with **SolidJS** and **Tailwind CSS**.
+-   **Powerful Tooling:** Utilizes the **Bun runtime** for fast performance and development speed.
+-   **Comprehensive Tooling:** Leverages the TanStack ecosystem (`Router`, `Table`, `Form`) for robust and scalable features.
 
-- [Netlify](https://netlify.com/)
+## 🚀 Tech Stack
 
-## Development
+-   **Runtime:** [Bun](https://bun.sh/)
+-   **Framework:** [SolidJS](https://www.solidjs.com/)
+-   **Real-time Sync:** [Roci Corp `zero`](https://rocicorp.dev/)
+-   **Routing:** [TanStack Router](https://tanstack.com/router)
+-   **UI Components:** [Kobalte](https://kobalte.dev/) & Custom Components
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+-   **Tables & Data Grids:** [TanStack Table](https://tanstack.com/table)
 
-From your terminal:
+## 📦 Getting Started
 
-```sh
-pnpm install
-pnpm dev
-```
+To get a local copy up and running, follow these simple steps.
 
-This starts your app in development mode, rebuilding assets on file changes.
+### Prerequisites
 
-## Editing and previewing the docs of TanStack projects locally
+Make sure you have [Bun](https://bun.sh/docs/installation) installed on your system.
 
-The documentations for all TanStack projects except for `React Charts` are hosted on [https://tanstack.com](https://tanstack.com), powered by this TanStack Router app.
-In production, the markdown doc pages are fetched from the GitHub repos of the projects, but in development they are read from the local file system.
+### Installation & Development
 
-Follow these steps if you want to edit the doc pages of a project (in these steps we'll assume it's [`TanStack/form`](https://github.com/tanstack/form)) and preview them locally :
+1.  **Clone the repository:**
+    ```sh
+    git clone <YOUR_REPOSITORY_URL>
+    cd anchkor
+    ```
 
-1. Create a new directory called `tanstack`.
+2.  **Install dependencies using Bun:**
+    ```sh
+    bun install
+    ```
 
-```sh
-mkdir tanstack
-```
+3.  **Run the development server:**
+    ```sh
+    bun dev
+    ```
 
-2. Enter the directory and clone this repo and the repo of the project there.
+The application will be available at `http://localhost:3000`.
 
-```sh
-cd tanstack
-git clone git@github.com:TanStack/tanstack.com.git
-git clone git@github.com:TanStack/form.git
-```
+## 🔗 Integrations
 
-> [!NOTE]
-> Your `tanstack` directory should look like this:
->
-> ```
-> tanstack/
->    |
->    +-- form/
->    |
->    +-- tanstack.com/
-> ```
+Anchkor is designed to be extensible. Connect to the following platforms:
 
-> [!WARNING]
-> Make sure the name of the directory in your local file system matches the name of the project's repo. For example, `tanstack/form` must be cloned into `form` (this is the default) instead of `some-other-name`, because that way, the doc pages won't be found.
-
-3. Enter the `tanstack/tanstack.com` directory, install the dependencies and run the app in dev mode:
-
-```sh
-cd tanstack.com
-pnpm i
-# The app will run on https://localhost:3000 by default
-pnpm dev
-```
-
-4. Now you can visit http://localhost:3000/form/latest/docs/overview in the browser and see the changes you make in `tanstack/form/docs`.
-
-> [!NOTE]
-> The updated pages need to be manually reloaded in the browser.
-
-> [!WARNING]
-> You will need to update the `docs/config.json` file (in the project's repo) if you add a new doc page!
+-   [ ] **Shopify:** (Instructions on how to connect)
+-   [ ] **WooCommerce:** (Instructions on how to connect)

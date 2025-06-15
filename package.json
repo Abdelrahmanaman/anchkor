@@ -1,5 +1,5 @@
 {
-	"name": "tanstack-solid-start-example-basic",
+	"name": "anchkor",
 	"private": true,
 	"sideEffects": false,
 	"type": "module",
@@ -7,11 +7,15 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"start": "bun run .output/server/index.mjs",
-		"dev:studio": "bunx drizzle-kit studio"
+		"dev:studio": "bunx drizzle-kit studio",
+		"dev:cache": "zero-cache-dev -p ./schema.ts",
+		"generate": "drizzle-zero generate --format",
+		"postinstall": "bun generate"
 	},
 	"dependencies": {
 		"@iconify-json/tabler": "^1.2.19",
 		"@kobalte/core": "^0.13.10",
+		"@rocicorp/zero": "0.20",
 		"@tailwindcss/vite": "^4.1.10",
 		"@tanstack/solid-form": "^1.12.2",
 		"@tanstack/solid-router": "^1.121.0",
@@ -24,6 +28,7 @@
 		"cva": "^1.0.0-beta.4",
 		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.44.2",
+		"drizzle-zero": "^0.10.8",
 		"lucide-solid": "^0.513.0",
 		"pg": "^8.16.0",
 		"postgres": "^3.4.7",

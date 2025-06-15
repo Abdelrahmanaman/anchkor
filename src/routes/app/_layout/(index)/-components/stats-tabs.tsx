@@ -13,7 +13,7 @@ import { StoreStatus } from "./store-status";
 export function StatsTabs() {
 	return (
 		<Tabs defaultValue="recent-orders" class="w-full">
-			<TabsList class="grid max-w-[600px] grid-cols-4 gap-1">
+			<TabsList class="grid max-w-[600px] grid-cols-4 gap-1 bg-transparent">
 				<TabsTrigger value="overview" class="flex items-center gap-2">
 					<div class="iconify tabler--layout-dashboard " aria-hidden />
 					<span class="hidden md:block">Overview</span>
@@ -30,7 +30,7 @@ export function StatsTabs() {
 					<div class="iconify tabler--chart-line" aria-hidden />
 					<span class="hidden md:block">Analytics</span>
 				</TabsTrigger>
-				<TabsIndicator />
+				<TabsIndicator class="bg-card"/>
 			</TabsList>
 			<TabsContent value="overview">
 				<OverviewStats />
