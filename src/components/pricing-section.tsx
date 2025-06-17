@@ -1,4 +1,5 @@
 import { For } from "solid-js";
+import { Button } from "./ui/Button";
 
 const plans = [
 	{
@@ -89,9 +90,7 @@ export function PricingSection() {
 										</For>
 									</ul>
 								</div>
-								<button type="button" class="btn-primary w-full">
-									{plan.cta}
-								</button>
+								<Button variant="default">{plan.cta}</Button>
 							</div>
 						)}
 					</For>

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/solid-router";
 import { For } from "solid-js";
+import { buttonVariants } from "../ui/Button";
 import MobileNav from "./mobile-nav";
 
 type NavItem = {
@@ -29,7 +30,7 @@ export default function Header() {
 							{(item: NavItem) => (
 								<Link
 									to={item.href}
-									class=" btn-ghost"
+									class={buttonVariants({ variant: "ghost" })}
 									activeProps={{
 										class: "btn-secondary",
 									}}
@@ -41,10 +42,10 @@ export default function Header() {
 					</div>
 				</div>
 				<div class="flex items-center gap-2">
-					<Link to="/login" class="btn-primary">
+					<Link to="/login" class={buttonVariants({ variant: "default" })}>
 						Login
 					</Link>
-					<Link to="/register" class="btn-outline">
+					<Link to="/register" class={buttonVariants({ variant: "outline" })}>
 						Register
 					</Link>
 				</div>

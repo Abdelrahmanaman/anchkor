@@ -52,14 +52,14 @@ const DialogContent = <T extends ValidComponent = "div">(
 			<DialogOverlay />
 			<DialogPrimitive.Content
 				class={cn(
-					"fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border border-accent/40 bg-background p-6 duration-200 ",
+					"fixed top-[50%] left-[50%] z-50 grid max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border border-accent/40 bg-background p-6 duration-200 ",
 					local.class,
 				)}
 				{...rest}
 			>
 				{local.children}
 				<DialogPrimitive.CloseButton class="absolute top-4 right-4 rounded-sm outline-primary focus:outline-2">
-					<div class="i-solar:close-square-linear size-5" aria-hidden />
+					<div class="iconify solar--close-square-bold" aria-hidden />
 					<span class="sr-only">Close</span>
 				</DialogPrimitive.CloseButton>
 			</DialogPrimitive.Content>

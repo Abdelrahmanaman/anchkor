@@ -1,0 +1,1 @@
+ALTER TABLE "workspace" ADD COLUMN "website_url" text NOT NULL;

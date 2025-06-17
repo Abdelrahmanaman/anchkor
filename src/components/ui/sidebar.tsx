@@ -24,6 +24,7 @@ import { Polymorphic } from "@kobalte/core";
 import { type VariantProps, cva } from "cva";
 
 import { cn } from "~/utils/cn";
+import { Button } from "./Button";
 import { TextField, TextFieldInput } from "./input";
 import { Separator } from "./separator";
 import { Sheet, SheetContent } from "./sheet";
@@ -277,8 +278,9 @@ const SidebarTrigger = (props: SidebarTriggerProps) => {
 	const { toggleSidebar } = useSidebar();
 
 	return (
-		<button
+		<Button
 			data-sidebar="trigger btn-icon-ghost"
+			variant="ghost"
 			class={cn("size-7", local.class)}
 			onClick={(event: MouseEvent) => {
 				local.onClick?.(event);
@@ -288,7 +290,7 @@ const SidebarTrigger = (props: SidebarTriggerProps) => {
 		>
 			<div class="i-tabler:layout-sidebar-left-expand" aria-hidden />
 			<span class="sr-only">Toggle Sidebar</span>
-		</button>
+		</Button>
 	);
 };
 
@@ -297,7 +299,7 @@ const SidebarRail: Component<ComponentProps<"button">> = (props) => {
 	const { toggleSidebar } = useSidebar();
 
 	return (
-		<button
+		<Button
 			data-sidebar="rail"
 			aria-label="Toggle Sidebar"
 			tabIndex={-1}

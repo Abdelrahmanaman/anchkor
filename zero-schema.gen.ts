@@ -24,63 +24,63 @@ import type { default as zeroSchema } from "./drizzle-zero.config";
  */
 export const schema = {
   tables: {
-    carrier: {
-      name: "carrier",
+    comment: {
+      name: "comment",
       columns: {
         id: {
           type: "string",
           optional: false,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrier",
+            "comment",
             "id"
           >,
         },
-        organizationId: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrier",
-            "organizationId"
-          >,
-          serverName: "organization_id",
-        },
-        name: {
+        feedbackId: {
           type: "string",
           optional: false,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrier",
-            "name"
+            "comment",
+            "feedbackId"
           >,
+          serverName: "feedback_id",
         },
-        apiKey: {
+        userId: {
           type: "string",
-          optional: true,
+          optional: false,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrier",
-            "apiKey"
+            "comment",
+            "userId"
           >,
-          serverName: "api_key",
+          serverName: "user_id",
+        },
+        message: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "comment",
+            "message"
+          >,
         },
         createdAt: {
           type: "number",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrier",
+            "comment",
             "createdAt"
           >,
           serverName: "created_at",
         },
         updatedAt: {
           type: "number",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrier",
+            "comment",
             "updatedAt"
           >,
           serverName: "updated_at",
@@ -88,155 +88,162 @@ export const schema = {
       },
       primaryKey: ["id"],
     },
-    carrierService: {
-      name: "carrierService",
+    feedback: {
+      name: "feedback",
       columns: {
         id: {
           type: "string",
           optional: false,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "carrierService",
+            "feedback",
             "id"
           >,
         },
-        carrierId: {
+        userId: {
           type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrierService",
-            "carrierId"
-          >,
-          serverName: "carrier_id",
-        },
-        name: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrierService",
-            "name"
-          >,
-        },
-        code: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrierService",
-            "code"
-          >,
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrierService",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "carrierService",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-      serverName: "carrier_service",
-    },
-    dutyTaxCalculation: {
-      name: "dutyTaxCalculation",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "dutyTaxCalculation",
-            "id"
-          >,
-        },
-        orderId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "dutyTaxCalculation",
-            "orderId"
-          >,
-          serverName: "order_id",
-        },
-        dutyAmount: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "dutyTaxCalculation",
-            "dutyAmount"
-          >,
-          serverName: "duty_amount",
-        },
-        taxAmount: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "dutyTaxCalculation",
-            "taxAmount"
-          >,
-          serverName: "tax_amount",
-        },
-        countryCode: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "dutyTaxCalculation",
-            "countryCode"
-          >,
-          serverName: "country_code",
-        },
-        calculationDetails: {
-          type: "json",
           optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "dutyTaxCalculation",
-            "calculationDetails"
+            "feedback",
+            "userId"
           >,
-          serverName: "calculation_details",
+          serverName: "user_id",
         },
-        createdAt: {
-          type: "number",
+        workspaceId: {
+          type: "string",
           optional: false,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "dutyTaxCalculation",
+            "feedback",
+            "workspaceId"
+          >,
+          serverName: "workspace_id",
+        },
+        title: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "title"
+          >,
+        },
+        message: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "message"
+          >,
+        },
+        likesCount: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "likesCount"
+          >,
+          serverName: "likes_count",
+        },
+        commentsCount: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "commentsCount"
+          >,
+          serverName: "comments_count",
+        },
+        status: {
+          type: "string",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "status"
+          >,
+        },
+        createdAt: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
             "createdAt"
           >,
           serverName: "created_at",
         },
         updatedAt: {
           type: "number",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
-            "dutyTaxCalculation",
+            "feedback",
             "updatedAt"
           >,
           serverName: "updated_at",
         },
       },
       primaryKey: ["id"],
-      serverName: "duty_tax_calculation",
+    },
+    like: {
+      name: "like",
+      columns: {
+        id: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "id"
+          >,
+        },
+        feedbackId: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "feedbackId"
+          >,
+          serverName: "feedback_id",
+        },
+        userId: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "userId"
+          >,
+          serverName: "user_id",
+        },
+        createdAt: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "createdAt"
+          >,
+          serverName: "created_at",
+        },
+        updatedAt: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "updatedAt"
+          >,
+          serverName: "updated_at",
+        },
+      },
+      primaryKey: ["id"],
     },
     member: {
       name: "member",
@@ -291,194 +298,6 @@ export const schema = {
         },
       },
       primaryKey: ["id"],
-    },
-    order: {
-      name: "order",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "id"
-          >,
-        },
-        storeId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "storeId"
-          >,
-          serverName: "store_id",
-        },
-        customerId: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "customerId"
-          >,
-          serverName: "customer_id",
-        },
-        orderNumber: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "orderNumber"
-          >,
-          serverName: "order_number",
-        },
-        status: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "status"
-          >,
-        },
-        totalAmount: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "totalAmount"
-          >,
-          serverName: "total_amount",
-        },
-        shippingAddress: {
-          type: "json",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "shippingAddress"
-          >,
-          serverName: "shipping_address",
-        },
-        billingAddress: {
-          type: "json",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "billingAddress"
-          >,
-          serverName: "billing_address",
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "order",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-    },
-    orderItem: {
-      name: "orderItem",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "id"
-          >,
-        },
-        orderId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "orderId"
-          >,
-          serverName: "order_id",
-        },
-        productId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "productId"
-          >,
-          serverName: "product_id",
-        },
-        quantity: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "quantity"
-          >,
-        },
-        unitPrice: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "unitPrice"
-          >,
-          serverName: "unit_price",
-        },
-        subtotal: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "subtotal"
-          >,
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "orderItem",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-      serverName: "order_item",
     },
     organization: {
       name: "organization",
@@ -537,378 +356,6 @@ export const schema = {
             "organization",
             "metadata"
           >,
-        },
-      },
-      primaryKey: ["id"],
-    },
-    product: {
-      name: "product",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "id"
-          >,
-        },
-        storeId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "storeId"
-          >,
-          serverName: "store_id",
-        },
-        name: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "name"
-          >,
-        },
-        sku: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "sku"
-          >,
-        },
-        price: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "price"
-          >,
-        },
-        weight: {
-          type: "number",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "weight"
-          >,
-        },
-        dimensions: {
-          type: "json",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "dimensions"
-          >,
-        },
-        hsCode: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "hsCode"
-          >,
-          serverName: "hs_code",
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "product",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-    },
-    shipment: {
-      name: "shipment",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "id"
-          >,
-        },
-        orderId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "orderId"
-          >,
-          serverName: "order_id",
-        },
-        carrierId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "carrierId"
-          >,
-          serverName: "carrier_id",
-        },
-        carrierServiceId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "carrierServiceId"
-          >,
-          serverName: "carrier_service_id",
-        },
-        trackingNumber: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "trackingNumber"
-          >,
-          serverName: "tracking_number",
-        },
-        labelUrl: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "labelUrl"
-          >,
-          serverName: "label_url",
-        },
-        rate: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "rate"
-          >,
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shipment",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-    },
-    shippingRate: {
-      name: "shippingRate",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "id"
-          >,
-        },
-        orderId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "orderId"
-          >,
-          serverName: "order_id",
-        },
-        carrierId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "carrierId"
-          >,
-          serverName: "carrier_id",
-        },
-        carrierServiceId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "carrierServiceId"
-          >,
-          serverName: "carrier_service_id",
-        },
-        rate: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "rate"
-          >,
-        },
-        estimatedDelivery: {
-          type: "number",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "estimatedDelivery"
-          >,
-          serverName: "estimated_delivery",
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "shippingRate",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
-        },
-      },
-      primaryKey: ["id"],
-      serverName: "shipping_rate",
-    },
-    store: {
-      name: "store",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "id"
-          >,
-        },
-        organizationId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "organizationId"
-          >,
-          serverName: "organization_id",
-        },
-        name: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "name"
-          >,
-        },
-        platform: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "platform"
-          >,
-        },
-        apiKey: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "apiKey"
-          >,
-          serverName: "api_key",
-        },
-        apiSecret: {
-          type: "string",
-          optional: true,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "apiSecret"
-          >,
-          serverName: "api_secret",
-        },
-        storeUrl: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "storeUrl"
-          >,
-          serverName: "store_url",
-        },
-        createdAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "createdAt"
-          >,
-          serverName: "created_at",
-        },
-        updatedAt: {
-          type: "number",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            typeof zeroSchema,
-            "store",
-            "updatedAt"
-          >,
-          serverName: "updated_at",
         },
       },
       primaryKey: ["id"],
@@ -985,287 +432,62 @@ export const schema = {
       },
       primaryKey: ["id"],
     },
-  },
-  relationships: {
-    carrier: {
-      organization: [
-        {
-          sourceField: ["organizationId"],
-          destField: ["id"],
-          destSchema: "organization",
-          cardinality: "one",
+    workspace: {
+      name: "workspace",
+      columns: {
+        id: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "id"
+          >,
         },
-      ],
-      carrierServices: [
-        {
-          sourceField: ["id"],
-          destField: ["carrierId"],
-          destSchema: "carrierService",
-          cardinality: "many",
+        organizationId: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "organizationId"
+          >,
+          serverName: "organization_id",
         },
-      ],
-      shippingRates: [
-        {
-          sourceField: ["id"],
-          destField: ["carrierId"],
-          destSchema: "shippingRate",
-          cardinality: "many",
+        name: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "name"
+          >,
         },
-      ],
-      shipments: [
-        {
-          sourceField: ["id"],
-          destField: ["carrierId"],
-          destSchema: "shipment",
-          cardinality: "many",
+        createdAt: {
+          type: "number",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "createdAt"
+          >,
+          serverName: "created_at",
         },
-      ],
-    },
-    carrierService: {
-      carrier: [
-        {
-          sourceField: ["carrierId"],
-          destField: ["id"],
-          destSchema: "carrier",
-          cardinality: "one",
+        updatedAt: {
+          type: "number",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "updatedAt"
+          >,
+          serverName: "updated_at",
         },
-      ],
-      shippingRates: [
-        {
-          sourceField: ["id"],
-          destField: ["carrierServiceId"],
-          destSchema: "shippingRate",
-          cardinality: "many",
-        },
-      ],
-      shipments: [
-        {
-          sourceField: ["id"],
-          destField: ["carrierServiceId"],
-          destSchema: "shipment",
-          cardinality: "many",
-        },
-      ],
-    },
-    dutyTaxCalculation: {
-      order: [
-        {
-          sourceField: ["orderId"],
-          destField: ["id"],
-          destSchema: "order",
-          cardinality: "one",
-        },
-      ],
-    },
-    member: {
-      organization: [
-        {
-          sourceField: ["organizationId"],
-          destField: ["id"],
-          destSchema: "organization",
-          cardinality: "one",
-        },
-      ],
-      user: [
-        {
-          sourceField: ["userId"],
-          destField: ["id"],
-          destSchema: "user",
-          cardinality: "one",
-        },
-      ],
-    },
-    orderItem: {
-      order: [
-        {
-          sourceField: ["orderId"],
-          destField: ["id"],
-          destSchema: "order",
-          cardinality: "one",
-        },
-      ],
-      product: [
-        {
-          sourceField: ["productId"],
-          destField: ["id"],
-          destSchema: "product",
-          cardinality: "one",
-        },
-      ],
-    },
-    order: {
-      store: [
-        {
-          sourceField: ["storeId"],
-          destField: ["id"],
-          destSchema: "store",
-          cardinality: "one",
-        },
-      ],
-      customer: [
-        {
-          sourceField: ["customerId"],
-          destField: ["id"],
-          destSchema: "user",
-          cardinality: "one",
-        },
-      ],
-      orderItems: [
-        {
-          sourceField: ["id"],
-          destField: ["orderId"],
-          destSchema: "orderItem",
-          cardinality: "many",
-        },
-      ],
-      shippingRates: [
-        {
-          sourceField: ["id"],
-          destField: ["orderId"],
-          destSchema: "shippingRate",
-          cardinality: "many",
-        },
-      ],
-      shipments: [
-        {
-          sourceField: ["id"],
-          destField: ["orderId"],
-          destSchema: "shipment",
-          cardinality: "many",
-        },
-      ],
-      dutyTaxCalculations: [
-        {
-          sourceField: ["id"],
-          destField: ["orderId"],
-          destSchema: "dutyTaxCalculation",
-          cardinality: "many",
-        },
-      ],
-    },
-    organization: {
-      members: [
-        {
-          sourceField: ["id"],
-          destField: ["organizationId"],
-          destSchema: "member",
-          cardinality: "many",
-        },
-      ],
-      stores: [
-        {
-          sourceField: ["id"],
-          destField: ["organizationId"],
-          destSchema: "store",
-          cardinality: "many",
-        },
-      ],
-      carriers: [
-        {
-          sourceField: ["id"],
-          destField: ["organizationId"],
-          destSchema: "carrier",
-          cardinality: "many",
-        },
-      ],
-    },
-    product: {
-      store: [
-        {
-          sourceField: ["storeId"],
-          destField: ["id"],
-          destSchema: "store",
-          cardinality: "one",
-        },
-      ],
-      orderItems: [
-        {
-          sourceField: ["id"],
-          destField: ["productId"],
-          destSchema: "orderItem",
-          cardinality: "many",
-        },
-      ],
-    },
-    shipment: {
-      order: [
-        {
-          sourceField: ["orderId"],
-          destField: ["id"],
-          destSchema: "order",
-          cardinality: "one",
-        },
-      ],
-      carrier: [
-        {
-          sourceField: ["carrierId"],
-          destField: ["id"],
-          destSchema: "carrier",
-          cardinality: "one",
-        },
-      ],
-      carrierService: [
-        {
-          sourceField: ["carrierServiceId"],
-          destField: ["id"],
-          destSchema: "carrierService",
-          cardinality: "one",
-        },
-      ],
-    },
-    shippingRate: {
-      order: [
-        {
-          sourceField: ["orderId"],
-          destField: ["id"],
-          destSchema: "order",
-          cardinality: "one",
-        },
-      ],
-      carrier: [
-        {
-          sourceField: ["carrierId"],
-          destField: ["id"],
-          destSchema: "carrier",
-          cardinality: "one",
-        },
-      ],
-      carrierService: [
-        {
-          sourceField: ["carrierServiceId"],
-          destField: ["id"],
-          destSchema: "carrierService",
-          cardinality: "one",
-        },
-      ],
-    },
-    store: {
-      organization: [
-        {
-          sourceField: ["organizationId"],
-          destField: ["id"],
-          destSchema: "organization",
-          cardinality: "one",
-        },
-      ],
-      products: [
-        {
-          sourceField: ["id"],
-          destField: ["storeId"],
-          destSchema: "product",
-          cardinality: "many",
-        },
-      ],
-      orders: [
-        {
-          sourceField: ["id"],
-          destField: ["storeId"],
-          destSchema: "order",
-          cardinality: "many",
-        },
-      ],
+      },
+      primaryKey: ["id"],
     },
   },
+  relationships: {},
 } as const;
 
 /**

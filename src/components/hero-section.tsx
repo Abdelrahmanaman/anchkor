@@ -3,9 +3,9 @@ export function HeroSection() {
 		<div class="relative isolate overflow-hidden bg-background">
 			<div class="mx-auto max-w-7xl lg:flex lg:items-center lg:gap-x-10 lg:py-40">
 				<div class="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
-					<div class="mb-8 flex items-center gap-2">
-						<div class="i-solar:box-bold size-14" />
-						<span class="font-semibold text-2xl">Anchkor</span>
+					<div class="mb-8 flex items-center gap-2 ">
+						<div class="iconify solar--box-linear size-14" />
+						<span class="text-left font-semibold text-4xl">Anchkor</span>
 					</div>
 					<h1 class="mt-10 max-w-lg font-bold text-4xl tracking-tight sm:text-6xl">
 						Streamline your order management
@@ -15,12 +15,8 @@ export function HeroSection() {
 						track inventory, and delight customers—all in one place.
 					</p>
 					<div class="mt-10 flex items-center gap-x-2">
-						<button type="button" class="btn-primary">
-							Get started
-						</button>
-						<button type="button" class="btn-outline">
-							Book a demo
-						</button>
+						<Button class="btn-primary">Get started</Button>
+						<Button variant="outline">Book a demo</Button>
 					</div>
 				</div>
 				<div class="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
@@ -40,6 +36,7 @@ export function HeroSection() {
 }
 
 import { For } from "solid-js";
+import { Button } from "./ui/Button";
 
 const features = [
 	{

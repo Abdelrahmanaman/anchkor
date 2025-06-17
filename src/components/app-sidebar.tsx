@@ -12,6 +12,14 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import { Button } from "./ui/Button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { WorkspaceCreationDialog } from "./workspace-creation/workspace-creation-dialog";
 
 const items = [
 	{
@@ -46,11 +54,26 @@ const items = [
 	},
 ];
 
+const feedbackItems = [
+	{
+		title: "Boards",
+		url: "#",
+		icon: <div class="iconify solar--clipboard-linear " />,
+	},
+];
+
 export function AppSidebar() {
 	return (
 		<Sidebar>
-			<SidebarHeader class="bg-background font-semibold text-3xl">
-				Anchkor
+			<SidebarHeader class="bg-background font-semibold ">
+				<DropdownMenu sameWidth>
+					<DropdownMenuTrigger as={Button<"button">} variant="outline">
+						Git Settings
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuItem as={WorkspaceCreationDialog} />
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</SidebarHeader>
 			<SidebarContent class="bg-background">
 				<SidebarGroup>
@@ -58,6 +81,23 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<For each={items}>
+								{(item) => (
+									<SidebarMenuItem>
+										<SidebarMenuButton as={Link} to={item.url}>
+											{item.icon}
+											<span>{item.title}</span>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								)}
+							</For>
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+				<SidebarGroup>
+					<SidebarGroupLabel>Feedbacks</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							<For each={feedbackItems}>
 								{(item) => (
 									<SidebarMenuItem>
 										<SidebarMenuButton as={Link} to={item.url}>

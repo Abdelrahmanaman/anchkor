@@ -3,19 +3,37 @@ import { splitProps } from "solid-js";
 
 import * as SheetPrimitive from "@kobalte/core/dialog";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
+import { type VariantProps, cva } from "cva";
+
 import { cn } from "~/utils/cn";
 
 const Sheet = SheetPrimitive.Root;
 const SheetTrigger = SheetPrimitive.Trigger;
 const SheetClose = SheetPrimitive.CloseButton;
 
-type PortalProps = SheetPrimitive.DialogPortalProps;
+const portalVariants = cva({
+	base: "fixed inset-0 z-50 flex",
+	variants: {
+		position: {
+			top: "items-start",
+			bottom: "items-end",
+			left: "justify-start",
+			right: "justify-end",
+		},
+	},
+	defaultVariants: { position: "right" },
+});
+
+type PortalProps = SheetPrimitive.DialogPortalProps &
+	VariantProps<typeof portalVariants>;
 
 const SheetPortal: Component<PortalProps> = (props) => {
-	const [local, others] = splitProps(props, ["children"]);
+	const [local, others] = splitProps(props, ["position", "children"]);
 	return (
 		<SheetPrimitive.Portal {...others}>
-			<div class={"fixed inset-0 z-50 flex justify-end"}>{local.children}</div>
+			<div class={portalVariants({ position: local.position })}>
+				{local.children}
+			</div>
 		</SheetPrimitive.Portal>
 	);
 };
@@ -40,32 +58,52 @@ const SheetOverlay = <T extends ValidComponent = "div">(
 	);
 };
 
+const sheetVariants = cva({
+	base: "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[closed=]:duration-300 data-[expanded=]:duration-500 data-[expanded=]:animate-in data-[closed=]:animate-out",
+	variants: {
+		position: {
+			top: "inset-x-0 top-0 border-b data-[closed=]:slide-out-to-top data-[expanded=]:slide-in-from-top",
+			bottom:
+				"inset-x-0 bottom-0 border-t data-[closed=]:slide-out-to-bottom data-[expanded=]:slide-in-from-bottom",
+			left: "inset-y-0 left-0 h-full w-3/4 border-r data-[closed=]:slide-out-to-left data-[expanded=]:slide-in-from-left sm:max-w-sm",
+			right:
+				"inset-y-0 right-0 h-full w-3/4 border-l data-[closed=]:slide-out-to-right data-[expanded=]:slide-in-from-right sm:max-w-sm",
+		},
+	},
+	defaultVariants: {
+		position: "right",
+	},
+});
+
 type DialogContentProps<T extends ValidComponent = "div"> =
-	SheetPrimitive.DialogContentProps<T> & {
-		class?: string | undefined;
-		children?: JSX.Element;
-	};
+	SheetPrimitive.DialogContentProps<T> &
+		VariantProps<typeof sheetVariants> & {
+			class?: string | undefined;
+			children?: JSX.Element;
+		};
 
 const SheetContent = <T extends ValidComponent = "div">(
 	props: PolymorphicProps<T, DialogContentProps<T>>,
 ) => {
 	const [local, others] = splitProps(props as DialogContentProps, [
+		"position",
 		"class",
 		"children",
 	]);
 	return (
-		<SheetPortal>
+		<SheetPortal position={local.position}>
 			<SheetOverlay />
 			<SheetPrimitive.Content
 				class={cn(
-					"data-[closed=]:slide-out-to-right data-[expanded=]:slide-in-from-right fixed inset-y-0 right-0 z-50 h-full h-screen w-3/4 gap-4 overflow-y-auto border-input bg-background shadow-lg transition ease-in-out data-[closed=]:animate-out data-[expanded=]:animate-in data-[closed=]:duration-300 data-[expanded=]:duration-500 sm:max-w-sm",
+					sheetVariants({ position: local.position }),
 					local.class,
+					"max-h-screen overflow-y-auto",
 				)}
 				{...others}
 			>
-				<div class="relative h-full p-6 pt-14">{local.children}</div>
-				<SheetPrimitive.CloseButton class="absolute top-4 right-4 z-10 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
-					<div class="i-solar:close-square-outline h-5 w-5" aria-hidden />
+				{local.children}
+				<SheetPrimitive.CloseButton class="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+					<div class="iconify solar--sidebar-minimalistic-linear" aria-hidden />
 					<span class="sr-only">Close</span>
 				</SheetPrimitive.CloseButton>
 			</SheetPrimitive.Content>
