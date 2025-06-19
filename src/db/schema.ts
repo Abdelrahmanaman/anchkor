@@ -117,7 +117,8 @@ export const workspace = pgTable("workspace", {
 		.notNull()
 		.references(() => organization.id, { onDelete: "cascade" }),
 	name: text("name").notNull(),
-	websiteUrl: text("website_url").notNull(),
+	domain: text("domain").notNull(),
+	logo: text("logo"),
 	createdAt: timestamp("created_at").notNull(),
 	updatedAt: timestamp("updated_at").notNull(),
 });
@@ -140,7 +141,7 @@ export const feedback = pgTable("feedback", {
 		.references(() => workspace.id, { onDelete: "cascade" }),
 	title: text("title").notNull(),
 	message: text("message").notNull(),
-	tags: text("tags").array(),
+	// tags: jsonb("tags").$type<string[]>().default([]),
 	likesCount: integer("likes_count").default(0).notNull(),
 	commentsCount: integer("comments_count").default(0).notNull(),
 	status: statusEnum("status").default("Pending").notNull(),
@@ -174,10 +175,7 @@ export const like = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
-	(table) => ({
-		uniqueLike: uniqueIndex("like_feedback_user_idx").on(
-			table.feedbackId,
-			table.userId,
-		),
-	}),
+	(table) => [
+		uniqueIndex("like_feedback_user_idx").on(table.feedbackId, table.userId),
+	],
 );

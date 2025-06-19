@@ -463,6 +463,15 @@ export const schema = {
             "name"
           >,
         },
+        domain: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "domain"
+          >,
+        },
         createdAt: {
           type: "number",
           optional: false,

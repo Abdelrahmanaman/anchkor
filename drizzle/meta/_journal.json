@@ -43,6 +43,13 @@
       "when": 1750185895886,
       "tag": "0005_foamy_human_fly",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1750255350258,
+      "tag": "0006_high_spot",
+      "breakpoints": true
     }
   ]
 }

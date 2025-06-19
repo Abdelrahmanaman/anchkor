@@ -9,6 +9,7 @@ import {
 	createContext,
 	useContext,
 } from "solid-js";
+import { createMutators } from "zero/mutators";
 
 const Context = createContext();
 
@@ -35,13 +36,16 @@ export default function ZeroContext(props: ParentProps) {
 			server: import.meta.env.VITE_PUBLIC_SERVER,
 			schema,
 			kvStore: "idb",
+			mutators: createMutators({ authData: loaderData().user.id }),
 		});
 	});
 
 	return <Context.Provider value={z}>{props.children}</Context.Provider>;
 }
 
+type Mutators = ReturnType<typeof createMutators>;
+
 export function useZero() {
 	const z = useContext(Context);
-	return z as Accessor<Zero<typeof schema>>;
+	return z as Accessor<Zero<typeof schema, Mutators>>;
 }
