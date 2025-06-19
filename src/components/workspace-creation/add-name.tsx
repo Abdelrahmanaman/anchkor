@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
@@ -13,6 +13,7 @@ import {
 } from "./use-create-workspace";
 import { setValid, valid } from "./workspace-creation-dialog";
 import { direction } from "./workspace-creation-dialog";
+import { findWorkspaceUrl } from "./workspace-creation-fn";
 
 interface AddNameProps {
 	form: ReturnType<typeof useCreateWorkspace>["createWorkspaceForm"];
@@ -20,6 +21,8 @@ interface AddNameProps {
 
 export function AddName({ form }: AddNameProps) {
 	const logoUrl = form.useStore((state) => state.values.logo);
+	const [isLoadingWorkspaceUrl, setIsLoadingWorkspaceUrl] = createSignal(false);
+
 	return (
 		<div
 			class={` flex h-3/4 animate-in flex-col justify-center gap-4 md:h-1/2 ${
@@ -39,15 +42,46 @@ export function AddName({ form }: AddNameProps) {
 			<form.Field
 				name="name"
 				validators={{
-					onChange: ({ fieldApi }) => {
+					onChangeAsyncDebounceMs: 500,
+					onChangeAsync: async ({ fieldApi, value }) => {
 						const errors = fieldApi.parseValueWithSchema(
 							workspaceSchema.get("name"),
 						);
-						if (errors) return errors;
-						setValid((prev) => ({
-							...prev,
-							name: true,
-						}));
+						if (errors) {
+							setValid((prev) => ({
+								...prev,
+								name: false,
+							}));
+							return errors;
+						}
+						try {
+							const isTakenUrl = await findWorkspaceUrl({
+								data: {
+									url: value,
+								},
+							});
+							console.log(isTakenUrl);
+							if (isTakenUrl) {
+								setValid((prev) => ({
+									...prev,
+									name: false,
+								}));
+								return "This workspace name is already taken";
+							}
+							setValid((prev) => ({
+								...prev,
+								name: true,
+							}));
+						} catch (error) {
+							setValid((prev) => ({
+								...prev,
+								name: false,
+							}));
+							console.error("Error fetching website data:", error);
+							return "Failed to get website Url";
+						} finally {
+							setIsLoadingWorkspaceUrl(false);
+						}
 					},
 				}}
 			>
@@ -83,11 +117,20 @@ export function AddName({ form }: AddNameProps) {
 									}}
 									class={`data-[invalid='']:focus-visible:ring-destructive ${valid().name ? "focus-visible:ring-green-600" : ""}`}
 								/>
-								<Show when={valid().name && !field().state.meta.errors.length}>
+								<Show when={isLoadingWorkspaceUrl()}>
+									<div class="iconify tabler--loader-3 -translate-y-1/2 absolute top-1/2 right-2 animate-spin " />
+								</Show>
+
+								<Show when={valid().name && !isLoadingWorkspaceUrl()}>
 									<div class="iconify solar--check-read-linear -translate-y-1/2 absolute top-1/2 right-2 text-green-600" />
 								</Show>
-								<Show when={field().state.meta.errors.length > 0}>
-									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-red-600" />
+								<Show
+									when={
+										field().state.meta.errors.length > 0 &&
+										!isLoadingWorkspaceUrl()
+									}
+								>
+									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-destructive" />
 								</Show>
 							</div>
 						</div>

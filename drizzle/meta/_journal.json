@@ -50,6 +50,13 @@
       "when": 1750255350258,
       "tag": "0006_high_spot",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1750342153504,
+      "tag": "0007_cooing_iron_fist",
+      "breakpoints": true
     }
   ]
 }

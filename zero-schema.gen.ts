@@ -472,6 +472,25 @@ export const schema = {
             "domain"
           >,
         },
+        workspaceUrl: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "workspaceUrl"
+          >,
+          serverName: "workspace_url",
+        },
+        logo: {
+          type: "string",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "workspace",
+            "logo"
+          >,
+        },
         createdAt: {
           type: "number",
           optional: false,

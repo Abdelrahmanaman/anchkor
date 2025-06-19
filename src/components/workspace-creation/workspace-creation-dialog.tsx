@@ -12,7 +12,7 @@ import { AddWebsite } from "./add-website";
 import { FinishCreation } from "./finsih-creation";
 import { useCreateWorkspace } from "./use-create-workspace";
 
-export const [step, setStep] = createSignal(1);
+export const [step, setStep] = createSignal(3);
 export const [prevStep, setPrevStep] = createSignal(1);
 export const [valid, setValid] = createSignal({
 	domain: false,
@@ -41,7 +41,7 @@ export function WorkspaceCreationDialog() {
 	}
 
 	return (
-		<Dialog>
+		<Dialog >
 			<DialogTrigger as={Button<"button">}>Edit Profile</DialogTrigger>
 			<DialogContent class="h-80 gap-0 overflow-auto p-0 sm:max-w-3xl md:grid md:min-h-[500px] md:w-3xl md:grid-cols-2">
 				<div class="flex w-full flex-col gap-2 bg-zinc-900 px-3 py-5 ">

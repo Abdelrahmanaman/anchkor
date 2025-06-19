@@ -1,5 +1,9 @@
 import { createServerFn } from "@tanstack/solid-start";
 import * as cheerio from "cheerio";
+import { Resend } from "resend";
+import { renderToString } from "solid-js/web";
+import { db } from "~/db/db";
+import { CollaborationInvite } from "../email/collaboration-invite";
 
 export const getWebsiteData = createServerFn({ method: "GET" })
 	.validator(
@@ -78,4 +82,62 @@ export const getWebsiteData = createServerFn({ method: "GET" })
 			description,
 			logoUrl,
 		};
+	});
+
+export const findWorkspaceUrl = createServerFn({ method: "GET" })
+	.validator(
+		({
+			url,
+		}: {
+			url: unknown;
+		}) => {
+			if (typeof url !== "string") {
+				throw new Error("Invalid url");
+			}
+			return {
+				url,
+			};
+		},
+	)
+	.handler(async ({ data }) => {
+		const workspace = await db.query.workspace.findFirst({
+			where: (workspace, { eq }) => eq(workspace.workspaceUrl, data.url),
+		});
+
+		return !!workspace;
+	});
+
+const resend = new Resend(process.env.RESEND_API_KEY as string);
+export const addCollaborator = createServerFn({ method: "GET" })
+	.validator(
+		({
+			email,
+		}: {
+			email: string;
+		}) => {
+			return {
+				email,
+			};
+		},
+	)
+	.handler(async ({ data: { email } }) => {
+		const html = renderToString(() =>
+			CollaborationInvite({
+				firstName: "John",
+				inviterName: "John",
+				projectName: "John",
+				token: "John",
+			}),
+		);
+
+		const { data, error } = await resend.emails.send({
+			from: "Anchkor <onboarding@resend.dev>",
+			to: [email],
+			subject: "You have been invited to join a workspace",
+			html,
+		});
+		if (error) {
+			throw error.message;
+		}
+		return data;
 	});

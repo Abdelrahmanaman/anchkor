@@ -8,7 +8,7 @@ import {
 	TextFieldInput,
 	TextFieldLabel,
 } from "../ui/input";
-import { getWebsiteData } from "./getWebsiteData";
+import { getWebsiteData } from "./workspace-creation-fn";
 import type { useCreateWorkspace } from "./use-create-workspace";
 import { setValid, valid } from "./workspace-creation-dialog";
 
@@ -115,7 +115,7 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 										!isLoadingWebsiteData()
 									}
 								>
-									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-red-600" />
+									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-destructive" />
 								</Show>
 							</div>
 						</div>

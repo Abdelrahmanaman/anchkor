@@ -1,5 +1,6 @@
 import type { CustomMutatorDefs, Transaction } from "@rocicorp/zero";
 import type { AuthData, Schema } from "schema";
+import { nanoid } from "nanoid";
 import type { WorkspaceType } from "~/components/workspace-creation/use-create-workspace";
 
 export function createMutators({ authData }: { authData: AuthData["sub"] }) {
@@ -20,12 +21,15 @@ export function createMutators({ authData }: { authData: AuthData["sub"] }) {
 			create: async (tx: Transaction<Schema>, workspace: WorkspaceType) => {
 				if (!authData) throw new Error("Not authenticated");
 
+				const id =  nanoid()
 				try {
 					await tx.mutate.workspace.insert({
+						id,
 						name: workspace.name,
 						domain: workspace.domain,
 						organizationId: "",
-						id: crypto.randomUUID(),
+						workspaceUrl: "",
+						logo: workspace.logo,
 						createdAt: Date.now(),
 						updatedAt: Date.now(),
 					});

@@ -3,7 +3,7 @@ import { type } from "arktype";
 import { useZero } from "../zero-app";
 
 const workspaceSchema = type({
-	domain: type("string.semver").configure({
+	domain: type("string").configure({
 		message: "Please enter a valid website URL.",
 	}),
 	name: type("string>3").configure({
@@ -12,11 +12,19 @@ const workspaceSchema = type({
 	logo: "string",
 	title: "string",
 	description: "string",
+	workspaceUrl: "string",
 });
 
-type WorkspaceType = typeof workspaceSchema.infer;
 
-export { workspaceSchema, type WorkspaceType };
+const email = type({
+	email: type("string.email").configure({
+		message: "Please enter a valid email.",
+	}),
+});
+type WorkspaceType = typeof workspaceSchema.infer;
+type EmailType = typeof email.infer;
+
+export { workspaceSchema, type WorkspaceType, email, type EmailType };
 
 export function useCreateWorkspace() {
 	const z = useZero();
@@ -27,7 +35,8 @@ export function useCreateWorkspace() {
 			logo: "",
 			title: "",
 			description: "",
-		},
+			workspaceUrl: "",
+		} as WorkspaceType,
 		onSubmit: async ({ value }) => {
 			z().mutate.workspace.create({
 				name: value.name,
@@ -35,6 +44,7 @@ export function useCreateWorkspace() {
 				logo: value.logo,
 				title: value.title,
 				description: value.description,
+				workspaceUrl: value.workspaceUrl,
 			});
 		},
 	}));

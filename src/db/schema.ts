@@ -118,6 +118,7 @@ export const workspace = pgTable("workspace", {
 		.references(() => organization.id, { onDelete: "cascade" }),
 	name: text("name").notNull(),
 	domain: text("domain").notNull(),
+	workspaceUrl: text("workspace_url").notNull(),
 	logo: text("logo"),
 	createdAt: timestamp("created_at").notNull(),
 	updatedAt: timestamp("updated_at").notNull(),

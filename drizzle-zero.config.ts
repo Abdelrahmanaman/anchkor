@@ -39,6 +39,7 @@ export default drizzleZeroConfig(drizzleSchema, {
 			organizationId: true,
 			name: true,
 			domain: true,
+			workspaceUrl: true,
 			logo: true,
 			createdAt: true,
 			updatedAt: true,
