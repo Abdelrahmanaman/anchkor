@@ -1,7 +1,8 @@
-import { For, Match, Show, Switch, createSignal } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { Button } from "../ui/Button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogTrigger,
@@ -12,18 +13,15 @@ import { AddWebsite } from "./add-website";
 import { FinishCreation } from "./finsih-creation";
 import { useCreateWorkspace } from "./use-create-workspace";
 
-export const [step, setStep] = createSignal(3);
-export const [prevStep, setPrevStep] = createSignal(1);
-export const [valid, setValid] = createSignal({
-	domain: false,
-	name: false,
-});
-
-export function direction() {
-	return step() > prevStep() ? "forward" : "backward";
-}
 export function WorkspaceCreationDialog() {
-	const { createWorkspaceForm: form } = useCreateWorkspace();
+	const {
+		createWorkspaceForm: form,
+		step,
+		setPrevStep,
+		setStep,
+		direction,
+	} = useCreateWorkspace();
+
 	function handleNextStep() {
 		if (step() >= 4) return;
 		setPrevStep(step());
@@ -36,12 +34,15 @@ export function WorkspaceCreationDialog() {
 		setStep(step() - 1);
 	}
 
-	function isValidStep() {
-		return step() === 1 ? valid().domain : step() === 2 ? valid().name : true;
-	}
-
+	// Handles the form state for the create-workspace button
+	const canSubmit = form.useStore((state) => state.canSubmit);
+	const isLoading = form.useStore((state) => state.isSubmitting);
+	const isValidating = form.useStore(
+		(state) => state.fieldMeta.domain?.isValidating,
+	);
+	const validDomain = form.useStore((state) => state.fieldMeta.domain?.isValid);
 	return (
-		<Dialog >
+		<Dialog>
 			<DialogTrigger as={Button<"button">}>Edit Profile</DialogTrigger>
 			<DialogContent class="h-80 gap-0 overflow-auto p-0 sm:max-w-3xl md:grid md:min-h-[500px] md:w-3xl md:grid-cols-2">
 				<div class="flex w-full flex-col gap-2 bg-zinc-900 px-3 py-5 ">
@@ -64,7 +65,7 @@ export function WorkspaceCreationDialog() {
 								<AddWebsite form={form} />
 							</Match>
 							<Match when={step() === 2}>
-								<AddName form={form} />
+								<AddName form={form} direction={direction} />
 							</Match>
 							<Match when={step() === 3}>
 								<AddCollaborators />
@@ -74,31 +75,66 @@ export function WorkspaceCreationDialog() {
 							</Match>
 						</Switch>
 						<DialogFooter class="flex w-full flex-row items-center justify-end">
-							<Show when={step() > 1 && step() < 4}>
-								<Button
-									variant="default"
-									size="sm"
-									onClick={handlePreviousStep}
-								>
-									<div class="iconify solar--arrow-left-linear" />
-									Back
-								</Button>
-							</Show>
-							<Show when={step() === 4}>
-								<Button variant="default" size="sm" onClick={handleNextStep}>
-									Start collecting
-								</Button>
-							</Show>
-							<Show when={step() < 4}>
-								<Button
-									disabled={step() >= 4 || !isValidStep()}
-									variant="default"
-									size="sm"
-									onClick={handleNextStep}
-								>
-									Continue <div class="iconify solar--arrow-right-linear" />
-								</Button>
-							</Show>
+							<Switch>
+								<Match when={step() === 1}>
+									<Button
+										disabled={isValidating() || !validDomain()}
+										variant="default"
+										onClick={handleNextStep}
+									>
+										Continue
+										<div class="iconify solar--arrow-right-linear" />
+									</Button>
+								</Match>
+								<Match when={step() === 2}>
+									<Button
+										variant="default"
+										size="sm"
+										onClick={handlePreviousStep}
+									>
+										<div class="iconify solar--arrow-left-linear" />
+										Back
+									</Button>
+									<form
+										onSubmit={(e) => {
+											e.preventDefault();
+											e.stopPropagation();
+											form.handleSubmit();
+										}}
+									>
+										<Button
+											disabled={!canSubmit() || isLoading()}
+											variant="default"
+											size="sm"
+											type="submit"
+										>
+											<Show
+												when={isLoading()}
+												fallback={
+													<>
+														Create workspace
+														<div class="iconify solar--arrow-right-linear" />
+													</>
+												}
+											>
+												Creating workspace
+												<div class="iconify tabler--loader-3 animate-spin" />
+											</Show>
+										</Button>
+									</form>
+								</Match>
+								<Match when={step() === 3}>
+									<Button variant="default" size="sm" onClick={handleNextStep}>
+										Skip <div class="iconify solar--arrow-right-linear" />
+									</Button>
+								</Match>
+								<Match when={step() === 4}>
+									<DialogClose as={Button<"button">} variant="default">
+										Start collecting
+										<div class="iconify solar--arrow-right-linear" />
+									</DialogClose>
+								</Match>
+							</Switch>
 						</DialogFooter>
 					</div>
 				</div>

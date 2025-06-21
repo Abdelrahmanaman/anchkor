@@ -56,22 +56,6 @@ export function CollaborationInvite({
 					</div>
 
 					{/* Header with Logo */}
-					<div
-						style={{
-							"margin-top": "24px",
-							"text-align": "center",
-						}}
-					>
-						<img
-							src={`${BASE_URL}/group.jpeg`}
-							width="160"
-							height="48"
-							alt={applicationName}
-							style={{
-								margin: "0 auto",
-							}}
-						/>
-					</div>
 
 					{/* Greeting */}
 					<div

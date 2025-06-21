@@ -1,4 +1,4 @@
-import { Show, createSignal } from "solid-js";
+import { Show } from "solid-js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
@@ -11,17 +11,15 @@ import {
 	type useCreateWorkspace,
 	workspaceSchema,
 } from "./use-create-workspace";
-import { setValid, valid } from "./workspace-creation-dialog";
-import { direction } from "./workspace-creation-dialog";
 import { findWorkspaceUrl } from "./workspace-creation-fn";
 
 interface AddNameProps {
 	form: ReturnType<typeof useCreateWorkspace>["createWorkspaceForm"];
+	direction: () => "forward" | "backward";
 }
 
-export function AddName({ form }: AddNameProps) {
+export function AddName({ form, direction }: AddNameProps) {
 	const logoUrl = form.useStore((state) => state.values.logo);
-	const [isLoadingWorkspaceUrl, setIsLoadingWorkspaceUrl] = createSignal(false);
 
 	return (
 		<div
@@ -42,16 +40,20 @@ export function AddName({ form }: AddNameProps) {
 			<form.Field
 				name="name"
 				validators={{
+					onMount: ({ fieldApi }) => {
+						const errors = fieldApi.parseValueWithSchema(
+							workspaceSchema.get("name"),
+						);
+						if (errors) {
+							return errors;
+						}
+					},
 					onChangeAsyncDebounceMs: 500,
 					onChangeAsync: async ({ fieldApi, value }) => {
 						const errors = fieldApi.parseValueWithSchema(
 							workspaceSchema.get("name"),
 						);
 						if (errors) {
-							setValid((prev) => ({
-								...prev,
-								name: false,
-							}));
 							return errors;
 						}
 						try {
@@ -60,27 +62,16 @@ export function AddName({ form }: AddNameProps) {
 									url: value,
 								},
 							});
-							console.log(isTakenUrl);
 							if (isTakenUrl) {
-								setValid((prev) => ({
-									...prev,
-									name: false,
-								}));
 								return "This workspace name is already taken";
 							}
-							setValid((prev) => ({
-								...prev,
-								name: true,
-							}));
+							fieldApi.form.setFieldValue(
+								"workspaceUrl",
+								`${value}.anchkor.com`,
+							);
 						} catch (error) {
-							setValid((prev) => ({
-								...prev,
-								name: false,
-							}));
 							console.error("Error fetching website data:", error);
 							return "Failed to get website Url";
-						} finally {
-							setIsLoadingWorkspaceUrl(false);
 						}
 					},
 				}}
@@ -115,19 +106,24 @@ export function AddName({ form }: AddNameProps) {
 											e.preventDefault();
 										}
 									}}
-									class={`data-[invalid='']:focus-visible:ring-destructive ${valid().name ? "focus-visible:ring-green-600" : ""}`}
+									class={`data-[invalid='']:focus-visible:ring-destructive ${field().state.meta.errors.length > 0 ? "focus-visible:ring-destructive" : ""}`}
 								/>
-								<Show when={isLoadingWorkspaceUrl()}>
+								<Show when={field().state.meta.isValidating}>
 									<div class="iconify tabler--loader-3 -translate-y-1/2 absolute top-1/2 right-2 animate-spin " />
 								</Show>
 
-								<Show when={valid().name && !isLoadingWorkspaceUrl()}>
+								<Show
+									when={
+										!field().state.meta.errors.length &&
+										!field().state.meta.isValidating
+									}
+								>
 									<div class="iconify solar--check-read-linear -translate-y-1/2 absolute top-1/2 right-2 text-green-600" />
 								</Show>
 								<Show
 									when={
 										field().state.meta.errors.length > 0 &&
-										!isLoadingWorkspaceUrl()
+										!field().state.meta.isValidating
 									}
 								>
 									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-destructive" />
@@ -138,7 +134,12 @@ export function AddName({ form }: AddNameProps) {
 							class=" ml-12"
 							error={field().state.meta.errors.join(",")}
 						/>
-						<Show when={valid().name && !field().state.meta.errors.length}>
+						<Show
+							when={
+								!field().state.meta.errors.length &&
+								!field().state.meta.isValidating
+							}
+						>
 							<p class="ml-11 text-muted-foreground text-xs">
 								{field().state.value}.anchkor.com
 							</p>

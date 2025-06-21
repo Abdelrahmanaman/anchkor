@@ -1,4 +1,4 @@
-import { Show, createSignal } from "solid-js";
+import { Show } from "solid-js";
 import { parse } from "tldts";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -8,16 +8,14 @@ import {
 	TextFieldInput,
 	TextFieldLabel,
 } from "../ui/input";
-import { getWebsiteData } from "./workspace-creation-fn";
 import type { useCreateWorkspace } from "./use-create-workspace";
-import { setValid, valid } from "./workspace-creation-dialog";
+import { getWebsiteData } from "./workspace-creation-fn";
 
 interface AddWebsiteProps {
 	form: ReturnType<typeof useCreateWorkspace>["createWorkspaceForm"];
 }
 
 export function AddWebsite({ form }: AddWebsiteProps) {
-	const [isLoadingWebsiteData, setIsLoadingWebsiteData] = createSignal(false);
 	const logoUrl = form.useStore((state) => state.values.logo);
 	return (
 		<div class="slide-in-from-right-50 flex h-3/4 animate-in flex-col justify-center gap-4 md:h-1/2">
@@ -32,24 +30,18 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 			<form.Field
 				name="domain"
 				validators={{
-					// onChange: ({ fieldApi }) => {
-					// 	const errors = fieldApi.parseValueWithSchema(
-					// 		workspaceSchema.get("domain"),
-					// 	);
-					// 	if (errors) return errors;
-					// },
+					onMount: ({ value }) => {
+						const domain = parse(value);
+						if (!domain.isIcann) {
+							return "Please enter a valid domain";
+						}
+					},
 					onChangeAsyncDebounceMs: 500,
 					onChangeAsync: async ({ value, fieldApi }) => {
 						const domain = parse(value);
 						if (!domain.isIcann) {
-							setValid((prev) => ({
-								...prev,
-								domain: false,
-							}));
 							return "Please enter a valid domain";
 						}
-
-						setIsLoadingWebsiteData(true); // Set loading to true
 						try {
 							const data = await getWebsiteData({
 								data: {
@@ -57,22 +49,13 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 								},
 							});
 							console.log(data);
+							fieldApi.form.setFieldValue("name", value.split(".")[0]);
 							fieldApi.form.setFieldValue("logo", data.logoUrl ?? "");
 							fieldApi.form.setFieldValue("title", data.title);
 							fieldApi.form.setFieldValue("description", data.description);
-							setValid((prev) => ({
-								...prev,
-								domain: true,
-							}));
 						} catch (error) {
-							setValid((prev) => ({
-								...prev,
-								domain: false,
-							}));
 							console.error("Error fetching website data:", error);
 							return "Failed to find this domain";
-						} finally {
-							setIsLoadingWebsiteData(false);
 						}
 					},
 				}}
@@ -100,21 +83,21 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 									onInput={(e) =>
 										field().handleChange((e.target as HTMLInputElement).value)
 									}
-									class={`data-[invalid='']:focus-visible:ring-destructive ${valid().domain ? "focus-visible:ring-green-600" : ""}`}
+									class={`data-[invalid='']:focus-visible:ring-destructive ${field().state.meta.errors.length > 0 ? "focus-visible:ring-destructive" : ""}`}
 								/>
-								<Show when={isLoadingWebsiteData()}>
+								<Show when={field().state.meta.isValidating}>
 									<div class="iconify tabler--loader-3 -translate-y-1/2 absolute top-1/2 right-2 animate-spin " />
 								</Show>
 
-								<Show when={valid().domain && !isLoadingWebsiteData()}>
-									<div class="iconify solar--check-read-linear -translate-y-1/2 absolute top-1/2 right-2 text-green-600" />
-								</Show>
 								<Show
 									when={
-										field().state.meta.errors.length > 0 &&
-										!isLoadingWebsiteData()
+										field().state.meta.isValid &&
+										!field().state.meta.isValidating
 									}
 								>
+									<div class="iconify solar--check-read-linear -translate-y-1/2 absolute top-1/2 right-2 text-green-600" />
+								</Show>
+								<Show when={field().state.meta.errors.length > 0}>
 									<div class="iconify tabler--alert-square-rounded -translate-y-1/2 absolute top-1/2 right-2 text-destructive" />
 								</Show>
 							</div>

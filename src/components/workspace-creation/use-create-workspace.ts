@@ -1,6 +1,7 @@
 import { createForm } from "@tanstack/solid-form";
 import { type } from "arktype";
-import { useZero } from "../zero-app";
+import { createSignal } from "solid-js";
+import { createWorkspace } from "./workspace-creation-fn";
 
 const workspaceSchema = type({
 	domain: type("string").configure({
@@ -15,7 +16,6 @@ const workspaceSchema = type({
 	workspaceUrl: "string",
 });
 
-
 const email = type({
 	email: type("string.email").configure({
 		message: "Please enter a valid email.",
@@ -27,7 +27,12 @@ type EmailType = typeof email.infer;
 export { workspaceSchema, type WorkspaceType, email, type EmailType };
 
 export function useCreateWorkspace() {
-	const z = useZero();
+	const [step, setStep] = createSignal(1);
+	const [prevStep, setPrevStep] = createSignal(1);
+
+	function direction() {
+		return step() > prevStep() ? "forward" : "backward";
+	}
 	const createWorkspaceForm = createForm(() => ({
 		defaultValues: {
 			domain: "",
@@ -38,16 +43,20 @@ export function useCreateWorkspace() {
 			workspaceUrl: "",
 		} as WorkspaceType,
 		onSubmit: async ({ value }) => {
-			z().mutate.workspace.create({
-				name: value.name,
-				domain: value.domain,
-				logo: value.logo,
-				title: value.title,
-				description: value.description,
-				workspaceUrl: value.workspaceUrl,
-			});
+			const res = await createWorkspace({ data: { data: value } });
+			const { success } = res;
+			if (success) {
+				setStep(3);
+			}
 		},
 	}));
 
-	return { createWorkspaceForm };
+	return {
+		createWorkspaceForm,
+		step,
+		prevStep,
+		setPrevStep,
+		setStep,
+		direction,
+	};
 }

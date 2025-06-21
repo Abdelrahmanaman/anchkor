@@ -6,5 +6,12 @@ const authClient = createAuthClient({
 	plugins: [jwtClient(), organizationClient()],
 });
 
-export const { signIn, signOut, signUp, getAccessToken, useSession, token } =
-	authClient;
+export const {
+	signIn,
+	signOut,
+	signUp,
+	getAccessToken,
+	useSession,
+	token,
+	organization,
+} = authClient;

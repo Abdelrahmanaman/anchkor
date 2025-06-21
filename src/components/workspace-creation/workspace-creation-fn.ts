@@ -1,10 +1,12 @@
 import { createServerFn } from "@tanstack/solid-start";
 import * as cheerio from "cheerio";
+import { nanoid } from "nanoid";
 import { Resend } from "resend";
 import { renderToString } from "solid-js/web";
 import { db } from "~/db/db";
+import { workspace } from "~/db/schema";
 import { CollaborationInvite } from "../email/collaboration-invite";
-
+import { workspaceSchema } from "./use-create-workspace";
 export const getWebsiteData = createServerFn({ method: "GET" })
 	.validator(
 		({
@@ -131,7 +133,7 @@ export const addCollaborator = createServerFn({ method: "GET" })
 		);
 
 		const { data, error } = await resend.emails.send({
-			from: "Anchkor <onboarding@resend.dev>",
+			from: "Anchkor <noreplay@abourka.com>",
 			to: [email],
 			subject: "You have been invited to join a workspace",
 			html,
@@ -140,4 +142,34 @@ export const addCollaborator = createServerFn({ method: "GET" })
 			throw error.message;
 		}
 		return data;
+	});
+
+export const createWorkspace = createServerFn({ method: "POST" })
+	.validator(({ data }) => {
+		const workspaceData = workspaceSchema.assert(data);
+		return {
+			workspaceData,
+		};
+	})
+	.handler(async ({ data: { workspaceData } }) => {
+		const id = nanoid();
+		const [insertedWorkspace] = await db
+			.insert(workspace)
+			.values([
+				{
+					id,
+					domain: workspaceData.domain,
+					name: workspaceData.name,
+					organizationId: "MR7wSx5lyqDCeMc96f1ovf0ZUw62cEL1",
+					workspaceUrl: workspaceData.workspaceUrl,
+					logo: workspaceData.logo,
+				},
+			])
+			.returning();
+
+		if (!insertedWorkspace) {
+			throw new Error("Insert failed, no row returned");
+		}
+
+		return { success: true };
 	});

@@ -26,7 +26,6 @@ function RouteComponent() {
 				email: value.email,
 				password: value.password,
 			});
-			console.log(d.data?.user.id);
 		},
 	}));
 	return (

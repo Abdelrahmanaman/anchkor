@@ -8,7 +8,7 @@ import { cn } from "~/utils/cn";
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
-
+const DialogClose = DialogPrimitive.CloseButton;
 const DialogPortal: Component<DialogPrimitive.DialogPortalProps> = (props) => {
 	const [local, rest] = splitProps(props, ["children"]);
 	return (
@@ -58,10 +58,10 @@ const DialogContent = <T extends ValidComponent = "div">(
 				{...rest}
 			>
 				{local.children}
-				<DialogPrimitive.CloseButton class="absolute top-4 right-4 rounded-sm outline-primary focus:outline-2">
+				<DialogClose class="absolute top-4 right-4 rounded-sm outline-primary focus:outline-2">
 					<div class="iconify solar--close-square-bold" aria-hidden />
 					<span class="sr-only">Close</span>
-				</DialogPrimitive.CloseButton>
+				</DialogClose>
 			</DialogPrimitive.Content>
 		</DialogPortal>
 	);
@@ -138,4 +138,5 @@ export {
 	DialogFooter,
 	DialogTitle,
 	DialogDescription,
+	DialogClose,
 };
