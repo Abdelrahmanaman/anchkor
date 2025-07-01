@@ -23,7 +23,10 @@ export function WorkspaceCreationDialog() {
 	} = useCreateWorkspace();
 
 	function handleNextStep() {
-		if (step() >= 4) return;
+		if (step() >= 4) {
+			setStep(1);
+			return;
+		}
 		setPrevStep(step());
 		setStep(step() + 1);
 	}
@@ -41,9 +44,21 @@ export function WorkspaceCreationDialog() {
 		(state) => state.fieldMeta.domain?.isValidating,
 	);
 	const validDomain = form.useStore((state) => state.fieldMeta.domain?.isValid);
+	const isPristine = form.useStore(
+		(state) => state.fieldMeta.domain?.isPristine,
+	);
+
 	return (
 		<Dialog>
-			<DialogTrigger as={Button<"button">}>Edit Profile</DialogTrigger>
+			<DialogTrigger
+				as={Button<"button">}
+				size="sm"
+				variant="ghost"
+				class="w-full justify-between"
+			>
+				Create workspace
+				<div class="iconify mynaui--plus-solid" />
+			</DialogTrigger>
 			<DialogContent class="h-80 gap-0 overflow-auto p-0 sm:max-w-3xl md:grid md:min-h-[500px] md:w-3xl md:grid-cols-2">
 				<div class="flex w-full flex-col gap-2 bg-zinc-900 px-3 py-5 ">
 					<div class="flex h-fit gap-1">
@@ -78,7 +93,7 @@ export function WorkspaceCreationDialog() {
 							<Switch>
 								<Match when={step() === 1}>
 									<Button
-										disabled={isValidating() || !validDomain()}
+										disabled={isValidating() || !validDomain() || isPristine()}
 										variant="default"
 										onClick={handleNextStep}
 									>
@@ -129,7 +144,11 @@ export function WorkspaceCreationDialog() {
 									</Button>
 								</Match>
 								<Match when={step() === 4}>
-									<DialogClose as={Button<"button">} variant="default">
+									<DialogClose
+										as={Button<"button">}
+										variant="default"
+										on:click={handleNextStep}
+									>
 										Start collecting
 										<div class="iconify solar--arrow-right-linear" />
 									</DialogClose>
@@ -138,11 +157,14 @@ export function WorkspaceCreationDialog() {
 						</DialogFooter>
 					</div>
 				</div>
-				<div class="hidden space-y-4 px-3 py-5 md:block">
-					<span class="block bg-red-600 p-2 font-bold text-5xl">Collect</span>
-					<span class="block bg-red-600 p-2 font-bold text-5xl">Discuss</span>
-					<span class="block bg-red-600 p-2 font-bold text-5xl">Plan</span>
-					<span class="block bg-red-600 p-2 font-bold text-5xl">Publish</span>
+				<div class="hidden overflow-y-hidden border-l bg-zinc-900/40 md:block">
+					<img
+						src="onboarding3.webp"
+						alt="onboarding"
+						width="500"
+						height="500"
+						class=" h-[500px] object-contain"
+					/>
 				</div>
 			</DialogContent>
 		</Dialog>

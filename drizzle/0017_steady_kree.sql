@@ -1,0 +1,1 @@
+ALTER TABLE "comment" ADD COLUMN "sd" text NOT NULL;

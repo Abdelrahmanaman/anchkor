@@ -56,6 +56,16 @@ export const schema = {
           >,
           serverName: "user_id",
         },
+        parentId: {
+          type: "string",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "comment",
+            "parentId"
+          >,
+          serverName: "parent_id",
+        },
         message: {
           type: "string",
           optional: false,
@@ -138,6 +148,24 @@ export const schema = {
             "message"
           >,
         },
+        type: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "type"
+          >,
+        },
+        tags: {
+          type: "json",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "feedback",
+            "tags"
+          >,
+        },
         likesCount: {
           type: "number",
           optional: true,
@@ -204,13 +232,23 @@ export const schema = {
         },
         feedbackId: {
           type: "string",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
             "like",
             "feedbackId"
           >,
           serverName: "feedback_id",
+        },
+        commentId: {
+          type: "string",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "like",
+            "commentId"
+          >,
+          serverName: "comment_id",
         },
         userId: {
           type: "string",
@@ -286,6 +324,16 @@ export const schema = {
             "role"
           >,
         },
+        teamId: {
+          type: "string",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "member",
+            "teamId"
+          >,
+          serverName: "team_id",
+        },
         createdAt: {
           type: "number",
           optional: false,
@@ -356,6 +404,60 @@ export const schema = {
             "organization",
             "metadata"
           >,
+        },
+      },
+      primaryKey: ["id"],
+    },
+    team: {
+      name: "team",
+      columns: {
+        id: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "team",
+            "id"
+          >,
+        },
+        name: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "team",
+            "name"
+          >,
+        },
+        organizationId: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "team",
+            "organizationId"
+          >,
+          serverName: "organization_id",
+        },
+        createdAt: {
+          type: "number",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "team",
+            "createdAt"
+          >,
+          serverName: "created_at",
+        },
+        updatedAt: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            typeof zeroSchema,
+            "team",
+            "updatedAt"
+          >,
+          serverName: "updated_at",
         },
       },
       primaryKey: ["id"],
@@ -493,7 +595,7 @@ export const schema = {
         },
         createdAt: {
           type: "number",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
             "workspace",
@@ -503,7 +605,7 @@ export const schema = {
         },
         updatedAt: {
           type: "number",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             typeof zeroSchema,
             "workspace",
@@ -515,7 +617,176 @@ export const schema = {
       primaryKey: ["id"],
     },
   },
-  relationships: {},
+  relationships: {
+    workspace: {
+      member: [
+        {
+          sourceField: ["organizationId"],
+          destField: ["id"],
+          destSchema: "organization",
+          cardinality: "many",
+        },
+        {
+          sourceField: ["id"],
+          destField: ["organizationId"],
+          destSchema: "member",
+          cardinality: "many",
+        },
+      ],
+      organization: [
+        {
+          sourceField: ["organizationId"],
+          destField: ["id"],
+          destSchema: "organization",
+          cardinality: "one",
+        },
+      ],
+      feedback: [
+        {
+          sourceField: ["id"],
+          destField: ["workspaceId"],
+          destSchema: "feedback",
+          cardinality: "many",
+        },
+      ],
+    },
+    member: {
+      user: [
+        {
+          sourceField: ["id"],
+          destField: ["id"],
+          destSchema: "member",
+          cardinality: "many",
+        },
+        {
+          sourceField: ["userId"],
+          destField: ["id"],
+          destSchema: "user",
+          cardinality: "many",
+        },
+      ],
+      organization: [
+        {
+          sourceField: ["organizationId"],
+          destField: ["id"],
+          destSchema: "organization",
+          cardinality: "one",
+        },
+      ],
+    },
+    comment: {
+      feedback: [
+        {
+          sourceField: ["feedbackId"],
+          destField: ["id"],
+          destSchema: "feedback",
+          cardinality: "one",
+        },
+      ],
+      user: [
+        {
+          sourceField: ["userId"],
+          destField: ["id"],
+          destSchema: "user",
+          cardinality: "one",
+        },
+      ],
+      parent: [
+        {
+          sourceField: ["parentId"],
+          destField: ["id"],
+          destSchema: "comment",
+          cardinality: "one",
+        },
+      ],
+      replies: [
+        {
+          sourceField: ["id"],
+          destField: ["parentId"],
+          destSchema: "comment",
+          cardinality: "many",
+        },
+      ],
+      likes: [
+        {
+          sourceField: ["id"],
+          destField: ["commentId"],
+          destSchema: "like",
+          cardinality: "many",
+        },
+      ],
+    },
+    feedback: {
+      user: [
+        {
+          sourceField: ["userId"],
+          destField: ["id"],
+          destSchema: "user",
+          cardinality: "one",
+        },
+      ],
+      workspace: [
+        {
+          sourceField: ["workspaceId"],
+          destField: ["id"],
+          destSchema: "workspace",
+          cardinality: "one",
+        },
+      ],
+      comments: [
+        {
+          sourceField: ["id"],
+          destField: ["feedbackId"],
+          destSchema: "comment",
+          cardinality: "many",
+        },
+      ],
+      likes: [
+        {
+          sourceField: ["id"],
+          destField: ["feedbackId"],
+          destSchema: "like",
+          cardinality: "many",
+        },
+      ],
+    },
+    like: {
+      feedback: [
+        {
+          sourceField: ["feedbackId"],
+          destField: ["id"],
+          destSchema: "feedback",
+          cardinality: "one",
+        },
+      ],
+      comment: [
+        {
+          sourceField: ["commentId"],
+          destField: ["id"],
+          destSchema: "comment",
+          cardinality: "one",
+        },
+      ],
+    },
+    organization: {
+      members: [
+        {
+          sourceField: ["id"],
+          destField: ["organizationId"],
+          destSchema: "member",
+          cardinality: "many",
+        },
+      ],
+      workspaces: [
+        {
+          sourceField: ["id"],
+          destField: ["organizationId"],
+          destSchema: "workspace",
+          cardinality: "many",
+        },
+      ],
+    },
+  },
 } as const;
 
 /**

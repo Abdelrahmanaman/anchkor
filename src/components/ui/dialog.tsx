@@ -52,14 +52,14 @@ const DialogContent = <T extends ValidComponent = "div">(
 			<DialogOverlay />
 			<DialogPrimitive.Content
 				class={cn(
-					"data-[closed]:fade-out-0 data-[expanded]:fade-in-0 data-[closed]:zoom-out-95 data-[expanded]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border border-accent/40 bg-background p-6 duration-200 data-[closed]:animate-out data-[expanded]:animate-in",
+					"data-[closed]:fade-out-0 data-[expanded]:fade-in-0 data-[closed]:zoom-out-95 data-[expanded]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid max-h-[calc(100%-2rem)] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border border-border bg-card p-6 duration-200 data-[closed]:animate-out data-[expanded]:animate-in ",
 					local.class,
 				)}
 				{...rest}
 			>
 				{local.children}
-				<DialogClose class="absolute top-4 right-4 rounded-sm outline-primary focus:outline-2">
-					<div class="iconify solar--close-square-bold" aria-hidden />
+				<DialogClose class="absolute top-4 right-4 rounded-sm bg-black outline-primary focus:outline-2">
+					<div class="iconify solar--close-square-bold block" />
 					<span class="sr-only">Close</span>
 				</DialogClose>
 			</DialogPrimitive.Content>

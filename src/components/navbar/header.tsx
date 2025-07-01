@@ -45,7 +45,7 @@ export default function Header() {
 					<Link to="/login" class={buttonVariants({ variant: "default" })}>
 						Login
 					</Link>
-					<Link to="/register" class={buttonVariants({ variant: "outline" })}>
+					<Link to="/app" class={buttonVariants({ variant: "outline" })}>
 						Register
 					</Link>
 				</div>

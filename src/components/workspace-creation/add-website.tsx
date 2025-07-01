@@ -30,12 +30,6 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 			<form.Field
 				name="domain"
 				validators={{
-					onMount: ({ value }) => {
-						const domain = parse(value);
-						if (!domain.isIcann) {
-							return "Please enter a valid domain";
-						}
-					},
 					onChangeAsyncDebounceMs: 500,
 					onChangeAsync: async ({ value, fieldApi }) => {
 						const domain = parse(value);
@@ -59,6 +53,14 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 						}
 					},
 				}}
+				listeners={{
+					onChange: ({ fieldApi }) => {
+						fieldApi.form.setFieldValue("logo", "");
+						fieldApi.form.setFieldValue("name", "");
+						fieldApi.form.setFieldValue("title", "");
+						fieldApi.form.setFieldValue("description", "");
+					},
+				}}
 			>
 				{(field) => (
 					<TextField
@@ -69,21 +71,25 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 					>
 						<TextFieldLabel class="sr-only">Website URL</TextFieldLabel>
 						<div class="flex w-full items-center gap-2">
-							<Avatar class="size-9 rounded-lg">
-								<AvatarImage src={logoUrl()} />
-								<AvatarFallback>
-									{field().state.value.slice(0, 2)}
-								</AvatarFallback>
-							</Avatar>
+							<Show when={logoUrl()}>
+								<Avatar class="slide-in-from-left size-9 animate-in rounded-lg">
+									<AvatarImage src={logoUrl()} />
+									<AvatarFallback>
+										{field().state.value.slice(0, 2)}
+									</AvatarFallback>
+								</Avatar>
+							</Show>
 							<div class="relative isolate w-full">
 								<TextFieldInput
 									placeholder="eg: supercoolwebsite.com"
 									id={field().name}
 									value={field().state.value}
 									onInput={(e) =>
-										field().handleChange((e.target as HTMLInputElement).value)
+										field().handleChange(
+											(e.target as HTMLInputElement).value.toLowerCase(),
+										)
 									}
-									class={`data-[invalid='']:focus-visible:ring-destructive ${field().state.meta.errors.length > 0 ? "focus-visible:ring-destructive" : ""}`}
+									class={`transition-[width] duration-200 ease-in data-[invalid='']:focus-visible:ring-destructive ${field().state.meta.errors.length > 0 ? "focus-visible:ring-destructive" : ""}`}
 								/>
 								<Show when={field().state.meta.isValidating}>
 									<div class="iconify tabler--loader-3 -translate-y-1/2 absolute top-1/2 right-2 animate-spin " />
@@ -92,7 +98,8 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 								<Show
 									when={
 										field().state.meta.isValid &&
-										!field().state.meta.isValidating
+										!field().state.meta.isValidating &&
+										!field().state.meta.isPristine
 									}
 								>
 									<div class="iconify solar--check-read-linear -translate-y-1/2 absolute top-1/2 right-2 text-green-600" />
@@ -103,7 +110,6 @@ export function AddWebsite({ form }: AddWebsiteProps) {
 							</div>
 						</div>
 						<TextFieldErrorMessage
-							class=" ml-12"
 							error={field().state.meta.errors.join(",")}
 						/>
 					</TextField>

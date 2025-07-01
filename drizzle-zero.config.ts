@@ -6,7 +6,9 @@ export default drizzleZeroConfig(drizzleSchema, {
 		verification: false,
 		account: false,
 		session: false,
+		invitation: false,
 		jwks: false,
+
 		user: {
 			id: true,
 			name: true,
@@ -16,7 +18,6 @@ export default drizzleZeroConfig(drizzleSchema, {
 			createdAt: true,
 			updatedAt: true,
 		},
-		invitation: false,
 
 		// Organization and members
 		organization: {
@@ -33,6 +34,14 @@ export default drizzleZeroConfig(drizzleSchema, {
 			userId: true,
 			role: true,
 			createdAt: true,
+			teamId: true,
+		},
+		team: {
+			id: true,
+			organizationId: true,
+			name: true,
+			createdAt: true,
+			updatedAt: true,
 		},
 		workspace: {
 			id: true,
@@ -48,6 +57,7 @@ export default drizzleZeroConfig(drizzleSchema, {
 			id: true,
 			feedbackId: true,
 			userId: true,
+			parentId: true,
 			message: true,
 			createdAt: true,
 			updatedAt: true,
@@ -64,13 +74,49 @@ export default drizzleZeroConfig(drizzleSchema, {
 			// tags: true,
 			createdAt: true,
 			updatedAt: true,
+			type: true,
+			tags: true,
 		},
 		like: {
 			id: true,
 			feedbackId: true,
 			userId: true,
-			createdAt: true,
+			createdAt: true, 
 			updatedAt: true,
+			commentId: true,
+		},
+	},
+	manyToMany: {
+		workspace: {
+			member: [
+				{
+					// The path from projects to organizations
+					sourceField: ["organizationId"],
+					destTable: "organization",
+					destField: ["id"],
+				},
+				{
+					// The path from organizations to members
+					sourceField: ["id"],
+					destTable: "member",
+
+					destField: ["organizationId"],
+				},
+			],
+		},
+		member: {
+			user: [
+				{
+					sourceField: ["id"],
+					destTable: "member",
+					destField: ["id"],
+				},
+				{
+					sourceField: ["userId"],
+					destTable: "user",
+					destField: ["id"],
+				},
+			],
 		},
 	},
 });

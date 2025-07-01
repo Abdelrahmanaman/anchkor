@@ -2,8 +2,8 @@
 @import "tw-animate-css";
 @plugin "@iconify/tailwind4" {
   /* biome-ignore lint/correctness/noUnknownProperty: <explanation> */
-  prefixes: solar, tabler;
-  scale: 1.25;
+  prefixes: solar, tabler, mynaui;
+  scale: 1.5;
 }
 @custom-variant dark (&:is(.dark *));
 

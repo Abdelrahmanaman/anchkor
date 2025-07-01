@@ -1,6 +1,11 @@
-import { Link } from "@tanstack/solid-router";
-import { For } from "solid-js";
-
+import { createQuery } from "@rocicorp/zero/solid";
+import {
+	Link,
+	type LinkOptions,
+	useParams,
+	useRouteContext,
+} from "@tanstack/solid-router";
+import { type Component, For } from "solid-js";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,82 +16,154 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	sidebarMenuButtonVariants,
 } from "~/components/ui/sidebar";
-import { Button } from "./ui/Button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuGroupLabel,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { WorkspaceCreationDialog } from "./workspace-creation/workspace-creation-dialog";
+import { useZero } from "./zero-app";
 
-const items = [
+// Reusable Icon Component
+const Icon: Component<{ class: string }> = (props) => (
+	<div class={`iconify ${props.class}`} />
+);
+
+// Update Items Type
+type Items = {
+	title: string;
+	url: LinkOptions["to"];
+	icon: string; // Store class name as string
+};
+
+const items: Items[] = [
 	{
-		title: "Dashboard",
-		url: "#",
-		icon: <div class="iconify tabler--layout-dashboard" />,
+		title: "Pending",
+		url: "/",
+		icon: "solar--inbox-archive-bold-duotone bg-yellow-500",
 	},
 	{
-		title: "Orders",
-		url: "#",
-		icon: <div class="iconify solar--reorder-linear " />,
+		title: "Reviewing",
+		url: "/",
+		icon: "solar--card-search-bold-duotone bg-blue-500",
 	},
 	{
-		title: "Inventory",
-		url: "#",
-		icon: <div class="iconify tabler--building-warehouse " />,
+		title: "Planned",
+		url: "/",
+		icon: "solar--calendar-mark-bold-duotone bg-purple-500",
 	},
 	{
-		title: "Stores",
-		url: "#",
-		icon: <div class="iconify tabler--building-store " />,
+		title: "Completed",
+		url: "/",
+		icon: "solar--archive-minimalistic-bold-duotone bg-green-500",
 	},
 	{
-		title: "Users",
-		url: "#",
-		icon: <div class="iconify solar--users-group-two-rounded-linear " />,
-	},
-	{
-		title: "Reports",
-		url: "#",
-		icon: <div class="iconify tabler--clipboard-data " />,
+		title: "Closed",
+		url: "/",
+		icon: "solar--archive-down-minimlistic-bold-duotone bg-gray-500",
 	},
 ];
 
-const feedbackItems = [
+const feedbackItems: Items[] = [
 	{
 		title: "Boards",
-		url: "#",
-		icon: <div class="iconify solar--clipboard-linear " />,
+		url: ".",
+		icon: "tabler--circle-dashed",
 	},
 ];
 
 export function AppSidebar() {
+	const params = useParams({ from: "/_layout/$workspaceId" });
+	const routerContext = useRouteContext({ from: "/_layout/$workspaceId" });
+	const z = useZero();
+	const [workspace] = createQuery(() =>
+		z()
+			.query.workspace.whereExists("member", (m) =>
+				m.where("userId", "=", z().userID),
+			)
+			.limit(20),
+	);
+
 	return (
 		<Sidebar>
-			<SidebarHeader class="bg-background font-semibold ">
+			<SidebarHeader class="bg-background font-semibold">
 				<DropdownMenu sameWidth>
-					<DropdownMenuTrigger as={Button<"button">} variant="outline">
-						Git Settings
+					<DropdownMenuTrigger class="justify-between px-1.5">
+						<div class="flex items-center gap-2">
+							<Avatar class="size-8 ">
+								<AvatarImage
+									src={routerContext().currentWorkspace?.logo || ""}
+								/>
+								<AvatarFallback class="uppercase">
+									{routerContext().currentWorkspace?.name.slice(0, 2)}
+								</AvatarFallback>
+							</Avatar>
+							<span class="truncate font-semibold text-lg first-letter:capitalize">
+								{routerContext().currentWorkspace?.name ||
+									"No Workspace Selected"}
+							</span>
+						</div>
+						<div class="iconify mynaui--chevron-up-down" aria-hidden />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
-						<DropdownMenuItem as={WorkspaceCreationDialog} />
+						<DropdownMenuGroup>
+							<DropdownMenuGroupLabel class="text-muted-foreground text-xs/tight">
+								Workspaces
+							</DropdownMenuGroupLabel>
+							<For each={workspace()}>
+								{(item) => (
+									<DropdownMenuItem class="relative isolate overflow-clip">
+										<Avatar class="size-5">
+											<AvatarImage src={item.logo || ""} />
+											<AvatarFallback class="uppercase">
+												{item.name.slice(0, 2)}
+											</AvatarFallback>
+										</Avatar>
+										<span>{item.name}</span>
+										<Link
+											class="absolute inset-0 z-20"
+											to="/$workspaceId"
+											params={{ workspaceId: item.id }}
+										/>
+									</DropdownMenuItem>
+								)}
+							</For>
+						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuGroupLabel class="text-muted-foreground text-xs/tight">
+								Actions
+							</DropdownMenuGroupLabel>
+							<DropdownMenuItem as={WorkspaceCreationDialog} />
+						</DropdownMenuGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</SidebarHeader>
 			<SidebarContent class="bg-background">
 				<SidebarGroup>
-					<SidebarGroupLabel>Application</SidebarGroupLabel>
+					<SidebarGroupLabel>Feedbacks</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<For each={items}>
 								{(item) => (
 									<SidebarMenuItem>
-										<SidebarMenuButton as={Link} to={item.url}>
-											{item.icon}
+										<Link
+											class={sidebarMenuButtonVariants({
+												variant: "default",
+												size: "default",
+											})}
+											to={item.url}
+										>
+											<Icon class={item.icon} />
 											<span>{item.title}</span>
-										</SidebarMenuButton>
+										</Link>
 									</SidebarMenuItem>
 								)}
 							</For>
@@ -101,7 +178,7 @@ export function AppSidebar() {
 								{(item) => (
 									<SidebarMenuItem>
 										<SidebarMenuButton as={Link} to={item.url}>
-											{item.icon}
+											<Icon class={item.icon} />
 											<span>{item.title}</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>

@@ -64,6 +64,90 @@
       "when": 1750433580884,
       "tag": "0008_tough_patch",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1750699040933,
+      "tag": "0009_fancy_zuras",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1750880906300,
+      "tag": "0010_first_phantom_reporter",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1750880955054,
+      "tag": "0011_little_quasimodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1750969355576,
+      "tag": "0012_gray_lily_hollister",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1751111652375,
+      "tag": "0013_glamorous_hedge_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1751223987527,
+      "tag": "0014_mature_sentry",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1751236464499,
+      "tag": "0015_tired_devos",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1751236697087,
+      "tag": "0016_shallow_redwing",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1751236771188,
+      "tag": "0017_steady_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1751236857326,
+      "tag": "0018_colossal_wallflower",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1751236965655,
+      "tag": "0019_tiresome_baron_strucker",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1751318351822,
+      "tag": "0020_mean_warbound",
+      "breakpoints": true
     }
   ]
 }

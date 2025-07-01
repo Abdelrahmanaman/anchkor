@@ -1,8 +1,8 @@
 import { createForm } from "@tanstack/solid-form";
 import { type } from "arktype";
 import { createSignal } from "solid-js";
+import { organization } from "~/lib/auth-client";
 import { createWorkspace } from "./workspace-creation-fn";
-
 const workspaceSchema = type({
 	domain: type("string").configure({
 		message: "Please enter a valid website URL.",
@@ -43,11 +43,24 @@ export function useCreateWorkspace() {
 			workspaceUrl: "",
 		} as WorkspaceType,
 		onSubmit: async ({ value }) => {
-			const res = await createWorkspace({ data: { data: value } });
+			const org = await organization.create({
+				name: value.name,
+				slug: value.name,
+			});
+
+			const orgId = org.data?.id;
+			if (!orgId) {
+				throw new Error("Organization ID is required");
+			}
+			const res = await createWorkspace({ data: { data: value, orgId } });
 			const { success } = res;
 			if (success) {
+				createWorkspaceForm.reset();
 				setStep(3);
 			}
+		},
+		validators: {
+			onMount: workspaceSchema,
 		},
 	}));
 

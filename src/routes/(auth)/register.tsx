@@ -28,7 +28,7 @@ function RouteComponent() {
 				email: value.email,
 				name: `${value.firstName} ${value.lastName}`,
 				password: value.password,
-			});
+			})
 		},
 	}));
 
@@ -76,8 +76,8 @@ function RouteComponent() {
 								onChange: ({ fieldApi }) => {
 									const errors = fieldApi.parseValueWithSchema(
 										registerSchema.get("firstName"),
-									);
-									if (errors) return errors;
+									)
+									if (errors) return errors
 								},
 							}}
 						>
@@ -111,8 +111,8 @@ function RouteComponent() {
 								onChange: ({ fieldApi }) => {
 									const errors = fieldApi.parseValueWithSchema(
 										registerSchema.get("lastName"),
-									);
-									if (errors) return errors;
+									)
+									if (errors) return errors
 								},
 							}}
 						>
@@ -146,7 +146,7 @@ function RouteComponent() {
 							onChange: ({ fieldApi }) => {
 								const errors = fieldApi.parseValueWithSchema(
 									registerSchema.get("email"),
-								);
+								)
 								if (errors) return errors;
 							},
 						}}
@@ -179,7 +179,7 @@ function RouteComponent() {
 							onChange: ({ fieldApi }) => {
 								const errors = fieldApi.parseValueWithSchema(
 									registerSchema.get("password"),
-								);
+								)
 								if (errors) return errors;
 							},
 						}}
@@ -245,5 +245,5 @@ function RouteComponent() {
 				</form>
 			</div>
 		</section>
-	);
+	)
 }

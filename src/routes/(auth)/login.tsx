@@ -25,7 +25,7 @@ function RouteComponent() {
 			const d = await signIn.email({
 				email: value.email,
 				password: value.password,
-			});
+			})
 		},
 	}));
 	return (
@@ -47,7 +47,7 @@ function RouteComponent() {
 					onclick={async () => {
 						await signIn.social({
 							provider: "google",
-						});
+						})
 					}}
 				>
 					<img
@@ -156,5 +156,5 @@ function RouteComponent() {
 				</form>
 			</div>
 		</section>
-	);
+	)
 }

@@ -3,6 +3,7 @@ import {
 	type PermissionsConfig,
 	type Row,
 	definePermissions,
+	querify,
 } from "@rocicorp/zero";
 import { type Schema, schema } from "zero-schema.gen";
 
@@ -15,11 +16,14 @@ export interface Workspace extends Row<typeof schema.tables.workspace> {}
 export interface Feedback extends Row<typeof schema.tables.feedback> {}
 export interface Comment extends Row<typeof schema.tables.comment> {}
 export interface Like extends Row<typeof schema.tables.like> {}
+export type Commesnt = Row<typeof schema.tables.comment>;
 
 export type AuthData = {
 	sub: string;
 	role: string;
 };
+
+export const builder = querify(schema);
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
 	return {
@@ -76,6 +80,45 @@ export const permissions = definePermissions<AuthData, Schema>(schema, () => {
 			},
 		},
 		workspace: {
+			row: {
+				// Can view comments
+				select: ANYONE_CAN,
+				// Only org admins can manage comments
+				insert: ANYONE_CAN,
+				update: {
+					preMutation: ANYONE_CAN,
+					postMutation: ANYONE_CAN,
+				},
+				delete: ANYONE_CAN,
+			},
+		},
+		feedback: {
+			row: {
+				// Can view comments
+				select: ANYONE_CAN,
+				// Only org admins can manage comments
+				insert: ANYONE_CAN,
+				update: {
+					preMutation: ANYONE_CAN,
+					postMutation: ANYONE_CAN,
+				},
+				delete: ANYONE_CAN,
+			},
+		},
+		like: {
+			row: {
+				// Can view comments
+				select: ANYONE_CAN,
+				// Only org admins can manage comments
+				insert: ANYONE_CAN,
+				update: {
+					preMutation: ANYONE_CAN,
+					postMutation: ANYONE_CAN,
+				},
+				delete: ANYONE_CAN,
+			},
+		},
+		team: {
 			row: {
 				// Can view comments
 				select: ANYONE_CAN,

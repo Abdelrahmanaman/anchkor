@@ -15,8 +15,10 @@ const Context = createContext();
 
 export default function ZeroContext(props: ParentProps) {
 	const loaderData = useLoaderData({
-		from: "/app/_layout",
+		from: "/_layout",
 	});
+
+	console.log(loaderData());
 	const z = createMemo(() => {
 		return createZero({
 			userID: loaderData().user.id,
@@ -32,11 +34,14 @@ export default function ZeroContext(props: ParentProps) {
 				// }
 
 				return loaderData().jwt;
+				// return "eyJhbGciOiJFZERTQSIsImtpZCI6IkNDQkZQY3lsNFZYT3VVRXprNDhaOGU0cGhpc29pOUpYIn0.eyJuYW1lIjoiQWJkZWxyYWhtYW4gQm91cmthIiwiZW1haWwiOiJhYm91cmthQGdtYWlsLmNvbSIsImVtYWlsVmVyaWZpZWQiOmZhbHNlLCJpbWFnZSI6bnVsbCwiY3JlYXRlZEF0IjoiMjAyNS0wNi0xMVQyMjoxODo1MS45NzFaIiwidXBkYXRlZEF0IjoiMjAyNS0wNi0xMVQyMjoxODo1MS45NzFaIiwiaWQiOiI4NDJxbVRTYWE4NHp4OEo5TWxPQkJiY0RpUzhEZlNJTSIsImlhdCI6MTc1MTExMjYxOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiZXhwIjoxNzUxMTk5MDE5LCJzdWIiOiI4NDJxbVRTYWE4NHp4OEo5TWxPQkJiY0RpUzhEZlNJTSJ9.vpgFIO_P2PZYsKpB5MVIsdIOpmfOkVlqe3MZHlULmBoZbIoHFBJEE2KASNXRMUAfFwmJBNO_7g82qbjk302ABw";
 			},
 			server: import.meta.env.VITE_PUBLIC_SERVER,
 			schema,
-			kvStore: "idb",
-			mutators: createMutators({ authData: loaderData().user.id }),
+			mutators: createMutators({
+				authData: loaderData().user.id,
+			}),
+			logLevel: "info" as const,
 		});
 	});
 

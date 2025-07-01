@@ -63,7 +63,7 @@ export function AddName({ form, direction }: AddNameProps) {
 								},
 							});
 							if (isTakenUrl) {
-								return "This workspace name is already taken";
+								return "This subdomain is already taken";
 							}
 							fieldApi.form.setFieldValue(
 								"workspaceUrl",
@@ -71,7 +71,7 @@ export function AddName({ form, direction }: AddNameProps) {
 							);
 						} catch (error) {
 							console.error("Error fetching website data:", error);
-							return "Failed to get website Url";
+							return "Failed to get the domain availability";
 						}
 					},
 				}}
@@ -98,7 +98,9 @@ export function AddName({ form, direction }: AddNameProps) {
 									value={field().state.value}
 									onInput={(e) =>
 										field().handleChange(
-											(e.target as HTMLInputElement).value.replace(/\s/g, ""),
+											(e.target as HTMLInputElement).value
+												.replace(/\s/g, "")
+												.toLowerCase(),
 										)
 									}
 									onKeyDown={(e) => {

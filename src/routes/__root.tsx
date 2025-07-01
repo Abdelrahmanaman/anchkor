@@ -1,4 +1,9 @@
-import { ColorModeProvider, cookieStorageManagerSSR } from "@kobalte/core";
+/// <reference types="vite/client" />
+import {
+	ColorModeProvider,
+	ColorModeScript,
+	cookieStorageManagerSSR,
+} from "@kobalte/core";
 import {
 	HeadContent,
 	Outlet,
@@ -86,8 +91,9 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
 	return (
 		<>
 			<HeadContent />
+			<ColorModeScript storageType={storageManager.type} />
 			<ColorModeProvider storageManager={storageManager}>
-				<main class="h-dvh bg-background p-4 text-foreground">{children}</main>
+				<main class="h-dvh bg-background text-foreground">{children}</main>
 			</ColorModeProvider>
 			<TanStackRouterDevtools position="bottom-right" />
 			<Scripts />

@@ -13,6 +13,9 @@ export default defineConfig({
 		}),
 		tanstackStart({
 			target: "bun",
+			spa: {
+				enabled: true,
+			},
 		}),
 		tailwindcss(),
 	],

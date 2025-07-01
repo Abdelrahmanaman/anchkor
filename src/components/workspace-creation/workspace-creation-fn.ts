@@ -102,8 +102,9 @@ export const findWorkspaceUrl = createServerFn({ method: "GET" })
 		},
 	)
 	.handler(async ({ data }) => {
+		const workspaceUrl = `${data.url}.anchkor.com`;
 		const workspace = await db.query.workspace.findFirst({
-			where: (workspace, { eq }) => eq(workspace.workspaceUrl, data.url),
+			where: (workspace, { eq }) => eq(workspace.workspaceUrl, workspaceUrl),
 		});
 
 		return !!workspace;
@@ -145,13 +146,17 @@ export const addCollaborator = createServerFn({ method: "GET" })
 	});
 
 export const createWorkspace = createServerFn({ method: "POST" })
-	.validator(({ data }) => {
+	.validator(({ data, orgId }) => {
 		const workspaceData = workspaceSchema.assert(data);
+	if (typeof orgId !== "string") {
+		throw new Error("Organization ID is required");
+	}
 		return {
 			workspaceData,
+			orgId,
 		};
 	})
-	.handler(async ({ data: { workspaceData } }) => {
+	.handler(async ({ data: { workspaceData, orgId } }) => {
 		const id = nanoid();
 		const [insertedWorkspace] = await db
 			.insert(workspace)
@@ -160,7 +165,7 @@ export const createWorkspace = createServerFn({ method: "POST" })
 					id,
 					domain: workspaceData.domain,
 					name: workspaceData.name,
-					organizationId: "MR7wSx5lyqDCeMc96f1ovf0ZUw62cEL1",
+					organizationId: orgId,
 					workspaceUrl: workspaceData.workspaceUrl,
 					logo: workspaceData.logo,
 				},

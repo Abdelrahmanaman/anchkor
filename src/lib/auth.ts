@@ -23,7 +23,11 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [
-		organization(),
+		organization({
+			teams: {
+				enabled: true,
+			},
+		}),
 		jwt({
 			jwt: {
 				expirationTime: "1d",

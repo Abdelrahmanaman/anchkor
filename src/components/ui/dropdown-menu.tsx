@@ -6,11 +6,31 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 
 import { cn } from "~/utils/cn";
 
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+
+type DropdownMenuTriggerProps<T extends ValidComponent = "button"> =
+	DropdownMenuPrimitive.DropdownMenuTriggerProps<T> & {
+		class?: string | undefined;
+	};
+
+const DropdownMenuTrigger = <T extends ValidComponent = "button">(
+	props: PolymorphicProps<T, DropdownMenuTriggerProps<T>>,
+) => {
+	const [, rest] = splitProps(props as DropdownMenuContentProps, ["class"]);
+
+	return (
+		<DropdownMenuPrimitive.Trigger
+			class={cn(
+				"inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-secondary px-5 py-2 font-medium text-secondary-foreground text-sm shadow outline-none hover:bg-secondary/80 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 has-[>svg]:px-3 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
+				props.class,
+			)}
+			{...rest}
+		/>
+	);
+};
 
 const DropdownMenu: Component<DropdownMenuPrimitive.DropdownMenuRootProps> = (
 	props,
